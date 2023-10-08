@@ -43,27 +43,37 @@ public class LoginController {
         String enteredUsername = username.getText();
         String enteredPassword = contra.getText();
 
-        if (enteredUsername.equals("usuario") && enteredPassword.equals("contraseña")) {
-            wrongLogin.setText("Credenciales correctas");
-            wrongLogin2.setText("");
-
-
-            Stage currentStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            currentStage.close();
-
-            //redirecciona a la ventana de login
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Inicio.fxml"));
-            Scene scene = new Scene(loader.load());
-            Stage stage = new Stage();
-            stage.setTitle("Inicio");
-            stage.setScene(scene);
-            stage.setResizable(false);
-            stage.show();
-
-
-
+        if (enteredUsername.isEmpty() || enteredPassword.isEmpty()) {
+            if (enteredUsername.isEmpty()) {
+                wrongLogin2.setText("Llenar campo de usuario");
+            } else {
+                wrongLogin2.setText("Llenar campo de contraseña");
+            }
         } else {
-            wrongLogin2.setText("Credenciales incorrectas");
+            if (enteredUsername.equals("usuario") && enteredPassword.equals("contraseña")) {
+                wrongLogin.setText("Credenciales correctas");
+                wrongLogin2.setText("");
+
+
+                Stage currentStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+                currentStage.close();
+
+                //redirecciona a la ventana de login
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("Inicio.fxml"));
+                Scene scene = new Scene(loader.load());
+                Stage stage = new Stage();
+                stage.setTitle("Inicio");
+                stage.setScene(scene);
+                stage.setResizable(false);
+                stage.show();
+
+            } else {
+                if (!enteredUsername.equals("usuario")) {
+                    wrongLogin2.setText("Usuario Incorrecto");
+                } else {
+                    wrongLogin2.setText("Contraseña Incorrecta");
+                }
+            }
         }
     }
 }
