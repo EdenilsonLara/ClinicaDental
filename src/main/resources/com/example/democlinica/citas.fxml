@@ -38,28 +38,23 @@
                     <Font name="Arial Bold" size="14.0" />
                 </font>
             </Button>
-            <Button layoutX="31.0" layoutY="220.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="122.0" text="Facturacion">
+            <Button layoutX="31.0" layoutY="221.0" mnemonicParsing="false" onAction="#irAInventario" prefHeight="25.0" prefWidth="122.0" text="Inventario">
                 <font>
                     <Font name="Arial Bold" size="14.0" />
                 </font>
             </Button>
-            <Button layoutX="31.0" layoutY="270.0" mnemonicParsing="false" onAction="#irAInventario" prefHeight="25.0" prefWidth="122.0" text="Inventario">
+            <Button layoutX="31.0" layoutY="271.0" mnemonicParsing="false" onAction="#irAEmpleados" prefHeight="25.0" prefWidth="122.0" text="Empleados">
                 <font>
                     <Font name="Arial Bold" size="14.0" />
                 </font>
             </Button>
-            <Button layoutX="31.0" layoutY="320.0" mnemonicParsing="false" onAction="#irAEmpleados" prefHeight="25.0" prefWidth="122.0" text="Empleados">
-                <font>
-                    <Font name="Arial Bold" size="14.0" />
-                </font>
-            </Button>
-            <Button layoutX="31.0" layoutY="370.0" mnemonicParsing="false" onAction="#irAProveedor" prefHeight="25.0" prefWidth="122.0" text="Proveedores">
+            <Button layoutX="31.0" layoutY="323.0" mnemonicParsing="false" onAction="#irAProveedor" prefHeight="25.0" prefWidth="122.0" text="Proveedores">
                 <font>
                     <Font name="Arial Bold" size="14.0" />
                 </font>
             </Button>
 
-            <Button layoutX="31.0" layoutY="420.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="122.0" text="Reportes">
+            <Button layoutX="31.0" layoutY="374.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="122.0" text="Reportes">
                 <font>
                     <Font name="Arial Bold" size="14.0" />
                 </font>
