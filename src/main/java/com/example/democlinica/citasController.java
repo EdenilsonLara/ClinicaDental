@@ -199,5 +199,23 @@ public class citasController {
     }
 
 
+    @FXML
+    private void irAReportes(ActionEvent event) throws IOException {
+        // Cargar la vista de Reportes desde Reportes.fxml
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Reportes.fxml"));
+        Parent root = loader.load();
+
+        // Obtener el controlador de la vista de tratamientos (si es necesario)
+        tratamientoController tratamientosController = loader.getController();
+
+        // Crear una nueva escena con la vista de tratamientos
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+
+        // Mostrar la nueva vista
+        stage.show();
+    }
+
 
 }

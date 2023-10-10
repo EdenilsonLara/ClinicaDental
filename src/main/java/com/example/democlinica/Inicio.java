@@ -36,6 +36,8 @@ public class Inicio {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
 
+
+
         // Mostrar la nueva vista
         stage.show();
     }
@@ -54,6 +56,7 @@ public class Inicio {
         Scene scene = new Scene(root);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
+
 
         // Mostrar la nueva vista
         stage.show();
@@ -161,7 +164,23 @@ public class Inicio {
     }
 
 
+    @FXML
+    private void irAReportes(ActionEvent event) throws IOException {
+        // Cargar la vista de tratamientos desde tratamientos.fxml
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Reportes.fxml"));
+        Parent root = loader.load();
 
+        // Obtener el controlador de la vista de tratamientos (si es necesario)
+        tratamientoController tratamientosController = loader.getController();
+
+        // Crear una nueva escena con la vista de tratamientos
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+
+        // Mostrar la nueva vista
+        stage.show();
+    }
 
 
 

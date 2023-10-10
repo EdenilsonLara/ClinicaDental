@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democlinica.Inicio">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democlinica.Inicio">
    <children>
       <Pane layoutX="-5.0" layoutY="2.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
          <children>
@@ -54,7 +54,7 @@
                         <Font name="Arial Bold" size="14.0" />
                      </font>
                   </Button>
-                  <Button layoutX="31.0" layoutY="370.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="122.0" text="Reportes">
+                  <Button layoutX="31.0" layoutY="370.0" mnemonicParsing="false" onAction="#irAReportes" prefHeight="25.0" prefWidth="122.0" text="Reportes">
                      <font>
                         <Font name="Arial Bold" size="14.0" />
                      </font>
