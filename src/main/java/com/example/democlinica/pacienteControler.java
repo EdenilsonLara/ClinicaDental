@@ -158,16 +158,17 @@ public class pacienteControler {
 
 
 
+
     @FXML
     private void irAReportes(ActionEvent event) throws IOException {
-        // Cargar la vista de Reportes desde Reportes.fxml
+        // Cargar la vista de reportes desde reportes.fxml
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Reportes.fxml"));
         Parent root = loader.load();
 
-        // Obtener el controlador de la vista de tratamientos (si es necesario)
-        tratamientoController tratamientosController = loader.getController();
+        // Obtener el controlador de la vista de reportes (si es necesario)
+        ReportesController reportesController = loader.getController();
 
-        // Crear una nueva escena con la vista de tratamientos
+        // Crear una nueva escena con la vista de reportes
         Scene scene = new Scene(root);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
