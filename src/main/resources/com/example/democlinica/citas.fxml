@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democlinica.citasController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democlinica.citasController">
 
     <Pane layoutY="71.0" prefHeight="511.0" prefWidth="183.0" style="-fx-background-color: rgb(60, 68, 87);">
         <cursor>
@@ -122,15 +122,17 @@
     <TextField layoutX="336.0" layoutY="199.0" prefHeight="25.0" prefWidth="273.0" />
     <TextField layoutX="775.0" layoutY="98.0" prefHeight="25.0" prefWidth="74.0" />
     <DatePicker layoutX="775.0" layoutY="150.0" />
-    <TableView layoutX="192.0" layoutY="309.0" prefHeight="200.0" prefWidth="766.0">
+    <TableView layoutX="188.0" layoutY="316.0" prefHeight="196.0" prefWidth="771.0">
         <columns>
-            <TableColumn prefWidth="75.0" text="ID CIta" />
-            <TableColumn prefWidth="75.0" text="Fecha" />
-            <TableColumn prefWidth="131.20001220703125" text="Paciente" />
-            <TableColumn prefWidth="84.0" text="Motivo" />
-            <TableColumn prefWidth="96.199951171875" text="Tratameinto" />
-            <TableColumn prefWidth="92.2000732421875" text="Costo" />
-            <TableColumn prefWidth="107.0" text="Estado" />
+            <TableColumn prefWidth="56.0" text="CodigoCIta" />
+            <TableColumn prefWidth="82.0" text="Nombres" />
+            <TableColumn prefWidth="97.0" text="Apellidos" />
+            <TableColumn prefWidth="98.0" text="Motivo" />
+            <TableColumn prefWidth="91.0" text="CodigoTratameinto" />
+            <TableColumn prefWidth="91.0" text="Costo" />
+            <TableColumn prefWidth="99.0" text="Fecha" />
+         <TableColumn minWidth="0.0" prefWidth="79.0" text="Estado" />
+         <TableColumn prefWidth="85.0" text="CodigoPaciente" />
         </columns>
     </TableView>
     <Button layoutX="444.0" layoutY="528.0" mnemonicParsing="false" text="Eliminar">
@@ -160,7 +162,7 @@
       </font>
    </Label>
    <TextField layoutX="336.0" layoutY="248.0" prefHeight="25.0" prefWidth="273.0" />
-   <Label layoutX="705.0" layoutY="241.0" prefHeight="39.0" prefWidth="70.0" text="CodigoPaciente:">
+   <Label layoutX="653.0" layoutY="241.0" prefHeight="39.0" prefWidth="122.0" text="CodigoPaciente:">
       <font>
          <Font name="Arial Bold" size="14.0" />
       </font>

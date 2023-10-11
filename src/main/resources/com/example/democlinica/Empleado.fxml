@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democlinica.EmpleadoController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democlinica.EmpleadoController">
 
     <Pane layoutY="71.0" prefHeight="511.0" prefWidth="183.0" style="-fx-background-color: rgb(60, 68, 87);">
         <cursor>
@@ -96,12 +96,12 @@
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Label>
-    <Button layoutX="467.0" layoutY="278.0" mnemonicParsing="false" text="Guardar">
+    <Button layoutX="446.0" layoutY="265.0" mnemonicParsing="false" text="Guardar">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Button>
-    <Button layoutX="610.0" layoutY="278.0" mnemonicParsing="false" text="Limpiar">
+    <Button layoutX="600.0" layoutY="265.0" mnemonicParsing="false" text="Limpiar">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>
@@ -110,13 +110,13 @@
     <TextField layoutX="783.0" layoutY="159.0" prefHeight="26.0" prefWidth="135.0" />
     <TableView layoutX="192.0" layoutY="309.0" prefHeight="200.0" prefWidth="766.0">
         <columns>
-            <TableColumn prefWidth="82.20001220703125" text="ID Empleados" />
-            <TableColumn prefWidth="150.4000244140625" text="Nombre " />
-            <TableColumn prefWidth="126.40005493164062" text="Fecha De Nacimiento" />
-            <TableColumn prefWidth="102.20001220703125" text="Dui" />
-            <TableColumn prefWidth="113.5999755859375" text="Genero" />
-            <TableColumn prefWidth="94.2000732421875" text="Telefono" />
-            <TableColumn prefWidth="94.2000732421875" text="Cargo" />
+            <TableColumn prefWidth="82.20001220703125" text="CodigoEmpleados" />
+            <TableColumn prefWidth="108.0" text="Nombres" />
+            <TableColumn prefWidth="116.0" text="Apellidos" />
+            <TableColumn prefWidth="116.0" text="Fecha" />
+            <TableColumn prefWidth="125.0" text="Genero" />
+            <TableColumn prefWidth="103.0" text="Dui" />
+            <TableColumn prefWidth="117.0" text="Telefono" />
         </columns>
     </TableView>
     <Button layoutX="444.0" layoutY="528.0" mnemonicParsing="false" text="Eliminar">
