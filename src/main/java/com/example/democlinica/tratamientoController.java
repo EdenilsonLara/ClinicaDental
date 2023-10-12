@@ -68,11 +68,6 @@ public class tratamientoController {
             return;
         }
 
-        tipoServicioTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("^([a-zA-Z])$|^([a-zA-Z])([a-zA-Z])$|^([a-zA-Z])([a-zA-Z])([a-zA-Z])$")) {
-                tipoServicioTextField.setText(oldValue);
-            }
-        });
         try {
             int costo = Integer.parseInt(costoText); // Convertir el costo a entero
 
