@@ -1,5 +1,6 @@
 package com.example.democlinica;
 
+import com.example.democlinica.BaseDatos.Conexion;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,43 +15,80 @@ import javafx.stage.Stage;
 
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Optional;
 
 public class citasController {
 
     @FXML
-    private Button guardarButton;
+    private TextField nombresTextField;
     @FXML
-    private TextField pacienteTextField;
+    private TextField apellidosTextField;
+    @FXML
+    private DatePicker fechaConsultaDatePicker;
     @FXML
     private TextField motivoTextField;
     @FXML
-    private TextField tratamientoTextField;
+    private TextField codigoTratamientoTextField;
     @FXML
     private TextField costoTextField;
     @FXML
-    private DatePicker fechaDatePicker;
+    private ComboBox<String> estadoComboBox;
     @FXML
-    private Button iniciobtn;
-
+    private TextField codigoPacienteTextField;
 
 
 
 
     @FXML
     private void guardarCita(ActionEvent event) {
-        String paciente = pacienteTextField.getText().trim();
-        String motivo = motivoTextField.getText().trim();
-        String tratamiento = tratamientoTextField.getText().trim();
-        String costo = costoTextField.getText().trim();
+        String nombres = nombresTextField.getText();
+        String apellidos = apellidosTextField.getText();
+        String motivo = motivoTextField.getText();
+        String codigoTratamiento = codigoTratamientoTextField.getText();
+        String costo = costoTextField.getText();
+        String fechaConsulta = fechaConsultaDatePicker.getValue().toString();  // Obtener la fecha del DatePicker como String
+        String estado = estadoComboBox.getValue(); // Obtener el estado seleccionado en el ComboBox
 
-        if (paciente.isEmpty() || motivo.isEmpty() || tratamiento.isEmpty() || costo.isEmpty()) {
-            mostrarAlerta("Campos Vacíos", "Por favor, complete todos los campos.");
+        // Validación de campos
+        if (nombres.isEmpty() || apellidos.isEmpty() || motivo.isEmpty() || codigoTratamiento.isEmpty() || costo.isEmpty() || fechaConsulta.isEmpty() || estado == null) {
+            mostrarAlerta("Campos Vacíos", "Por favor, complete todos los campos, incluyendo el estado.");
             return;
         }
 
+        // Intentar guardar la cita en la base de datos
+        try {
+            Connection conn = Conexion.getConnection();
+            String sql = "INSERT INTO tablaDeCitas (nombresPaciente, apellidosPaciente, motivoConsulta, codigoTratamiento, costo, fecha, estado) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, nombres);
+            pstmt.setString(2, apellidos);
+            pstmt.setString(3, motivo);
+            pstmt.setString(4, codigoTratamiento);
+            pstmt.setString(5, costo);
+            pstmt.setString(6, fechaConsulta);
+            pstmt.setString(7, estado);
 
+            int filasAfectadas = pstmt.executeUpdate();
+
+            if (filasAfectadas > 0) {
+                mostrarAlerta("Cita Guardada", "La cita se ha guardado correctamente en la base de datos.");
+            } else {
+                mostrarAlerta("Error", "No se pudo guardar la cita en la base de datos.");
+            }
+
+            pstmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            mostrarAlerta("Error de Base de Datos", "Hubo un error al conectar con la base de datos.");
+        }
     }
+
+
+
 
 
     // Método para cambiar a la vista de inicio

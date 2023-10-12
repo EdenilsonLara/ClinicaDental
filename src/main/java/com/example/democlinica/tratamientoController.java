@@ -1,5 +1,6 @@
 package com.example.democlinica;
 
+import com.example.democlinica.BaseDatos.Conexion;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,14 +10,74 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Optional;
+
+
 
 public class tratamientoController {
 
-    // ... otros campos y métodos ...
+    @FXML
+    private TextField tipoServicioTextField;
+    @FXML
+    private TextField costoTextField;
+
+
+
+    @FXML
+    private void guardarTratamiento(ActionEvent event) {
+        String tipoServicio = tipoServicioTextField.getText();
+        String costoText = costoTextField.getText();
+
+        // Validación de campos
+        if (tipoServicio.isEmpty() || costoText.isEmpty()) {
+            mostrarAlerta("Campos Vacíos", "Por favor, complete todos los campos.");
+            return;
+        }
+
+        try {
+            int costo = Integer.parseInt(costoText); // Convertir el costo a entero
+
+            Connection conn = Conexion.getConnection();
+            String sql = "INSERT INTO tablaDeTratamientos (TipoServicio, Costo) VALUES (?, ?)";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, tipoServicio);
+            pstmt.setInt(2, costo);
+
+            int filasAfectadas = pstmt.executeUpdate();
+
+            if (filasAfectadas > 0) {
+                mostrarAlerta("Tratamiento Guardado", "El tratamiento se ha guardado correctamente en la base de datos.");
+            } else {
+                mostrarAlerta("Error", "No se pudo guardar el tratamiento en la base de datos.");
+            }
+
+            pstmt.close();
+            conn.close();
+        } catch (NumberFormatException e) {
+            mostrarAlerta("Error en el Costo", "El costo debe ser un valor numérico.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            mostrarAlerta("Error de Base de Datos", "Hubo un error al conectar con la base de datos.");
+        }
+    }
+
+
+    private void mostrarAlerta(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
+
 
     @FXML
     private void irATratamientos(ActionEvent event) throws IOException {
