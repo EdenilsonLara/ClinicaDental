@@ -92,26 +92,26 @@
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Button>
-    <Button layoutX="595.0" layoutY="237.0" mnemonicParsing="false" text="Limpiar">
+    <Button layoutX="595.0" layoutY="237.0" mnemonicParsing="false" onAction="#limpiarCampos" text="Limpiar">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Button>
     <TextField fx:id="tipoServicioTextField" layoutX="493.0" layoutY="129.0" prefHeight="26.0" prefWidth="273.0" />
     <TextField fx:id="costoTextField" layoutX="493.0" layoutY="182.0" prefHeight="26.0" prefWidth="86.0" />
-    <TableView fx:id="tratamientoTableView" layoutX="192.0" layoutY="309.0" prefHeight="200.0" prefWidth="766.0">
+    <TableView fx:id="tratamientoTableView" editable="true" layoutX="192.0" layoutY="309.0" prefHeight="200.0" prefWidth="766.0">
         <columns>
             <TableColumn fx:id="codigoTratamientoColumn" prefWidth="99.19999694824219" text="CodigoTratameinto" />
             <TableColumn fx:id="tipoServicioColumn" prefWidth="538.0" text="Tipo de Servicio" />
          <TableColumn fx:id="costoColumn" prefWidth="116.0" text="Costo" />
         </columns>
     </TableView>
-    <Button layoutX="444.0" layoutY="528.0" mnemonicParsing="false" text="Eliminar">
+    <Button layoutX="444.0" layoutY="528.0" mnemonicParsing="false" onAction="#eliminarTratamiento" text="Eliminar">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Button>
-    <Button layoutX="592.0" layoutY="528.0" mnemonicParsing="false" text="Actualizar">
+    <Button fx:id="actualizar" layoutX="592.0" layoutY="528.0" mnemonicParsing="false" onAction="#actualizarTablaTratamientos" text="Editar">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>
