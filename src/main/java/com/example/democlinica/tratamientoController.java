@@ -59,8 +59,34 @@ public class tratamientoController {
             return;
         }
 
+        if (tipoServicio.length() > 32) {
+            mostrarAlerta("Error en Tipo de Servicio", "El tipo de servicio no debe exceder los 32 caracteres.");
+            return;
+        }
+        if (!tipoServicio.matches("^[a-zA-Z]+$")) {
+            mostrarAlerta("Error en Tipo de Servicio", "El tipo de servicio debe contener solo letras.");
+            return;
+        }
+
+        tipoServicioTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("^([a-zA-Z])$|^([a-zA-Z])([a-zA-Z])$|^([a-zA-Z])([a-zA-Z])([a-zA-Z])$")) {
+                tipoServicioTextField.setText(oldValue);
+            }
+        });
         try {
             int costo = Integer.parseInt(costoText); // Convertir el costo a entero
+
+            if (costo < 0 || costo > 999999) { // Puedes ajustar el rango de costo como desees
+                mostrarAlerta("Error en Costo", "El costo debe ser un número entre 0 y 999999.");
+                return;
+            }
+            costoTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (!newValue.matches("\\d*")) {
+                    costoTextField.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            });
+
+            // Otras validaciones que puedas necesitar
 
             Connection conn = Conexion.getConnection();
             String sql = "INSERT INTO tablaDeTratamientos (TipoServicio, Costo) VALUES (?, ?)";
@@ -86,6 +112,7 @@ public class tratamientoController {
             mostrarAlerta("Error de Base de Datos", "Hubo un error al conectar con la base de datos.");
         }
     }
+
 
     @FXML
     private void initialize() {
