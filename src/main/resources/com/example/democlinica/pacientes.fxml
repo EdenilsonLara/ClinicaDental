@@ -101,7 +101,7 @@
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Label>
-    <Button layoutX="445.0" layoutY="263.0" mnemonicParsing="false" onAction="#guardarPaciente" text="Guardar">
+    <Button layoutX="445.0" layoutY="263.0" mnemonicParsing="false" text="Guardar">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>
