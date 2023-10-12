@@ -19,6 +19,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class citasController {
 
@@ -38,9 +40,8 @@ public class citasController {
     private ComboBox<String> estadoComboBox;
     @FXML
     private TextField codigoPacienteTextField;
-
-
-
+    @FXML
+    private Label errorLabel;
 
     @FXML
     private void guardarCita(ActionEvent event) {
@@ -49,19 +50,38 @@ public class citasController {
         String motivo = motivoTextField.getText();
         String codigoTratamiento = codigoTratamientoTextField.getText();
         String costo = costoTextField.getText();
-        String fechaConsulta = fechaConsultaDatePicker.getValue().toString();  // Obtener la fecha del DatePicker como String
-        String estado = estadoComboBox.getValue(); // Obtener el estado seleccionado en el ComboBox
+        String fechaConsulta = fechaConsultaDatePicker.getValue().toString();
+        String estado = estadoComboBox.getValue();
+        String codigoPaciente = codigoPacienteTextField.getText();
 
         // Validación de campos
-        if (nombres.isEmpty() || apellidos.isEmpty() || motivo.isEmpty() || codigoTratamiento.isEmpty() || costo.isEmpty() || fechaConsulta.isEmpty() || estado == null) {
+        if (nombres.isEmpty() || apellidos.isEmpty() || motivo.isEmpty() || codigoTratamiento.isEmpty() || costo.isEmpty() || fechaConsulta.isEmpty() || estado == null ) {
             mostrarAlerta("Campos Vacíos", "Por favor, complete todos los campos, incluyendo el estado.");
             return;
         }
 
-        // Intentar guardar la cita en la base de datos
+
+        if (!esValidoNombre(nombres) || !esValidoNombre(apellidos)) {
+            mostrarError("Nombres y apellidos no pueden contener números.");
+            return;
+        }
+
+
+        if (!esValidoDUI(codigoPaciente)) {
+            mostrarError("DUI inválido o formato incorrecto.");
+            return;
+        }
+
+
+        if (!esValidoTelefono(costo)) {
+            mostrarError("Costo inválido o formato incorrecto.");
+            return;
+        }
+
+
         try {
             Connection conn = Conexion.getConnection();
-            String sql = "INSERT INTO tablaDeCitas (nombresPaciente, apellidosPaciente, motivoConsulta, codigoTratamiento, costo, fecha, estado) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO tablaDeCitas (nombresPaciente, apellidosPaciente, motivoConsulta, codigoTratamiento, costo, fecha, estado, codigoPaciente) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, nombres);
             pstmt.setString(2, apellidos);
@@ -70,6 +90,7 @@ public class citasController {
             pstmt.setString(5, costo);
             pstmt.setString(6, fechaConsulta);
             pstmt.setString(7, estado);
+
 
             int filasAfectadas = pstmt.executeUpdate();
 
@@ -86,6 +107,35 @@ public class citasController {
             mostrarAlerta("Error de Base de Datos", "Hubo un error al conectar con la base de datos.");
         }
     }
+
+    // Otras funciones y métodos
+
+    // Función para validar nombres y apellidos
+    private boolean esValidoNombre(String texto) {
+        return !texto.matches(".*\\d.*") && texto.length() <= 31;
+    }
+
+    // Función para validar DUI y el formato de número de identificación salvadoreño
+    private boolean esValidoDUI(String dui) {
+        // El formato del DUI es de 9 números con un guión
+        Pattern pattern = Pattern.compile("\\d{8}-\\d");
+        Matcher matcher = pattern.matcher(dui);
+        return matcher.matches();
+    }
+
+    // Función para validar teléfono y el formato de 8 dígitos con guión
+    private boolean esValidoTelefono(String telefono) {
+        // El formato del teléfono es de 8 números con un guión en el medio
+        Pattern pattern = Pattern.compile("\\d{4}-\\d{4}");
+        Matcher matcher = pattern.matcher(telefono);
+        return matcher.matches();
+    }
+
+    // Función para mostrar mensajes de error
+    private void mostrarError(String mensaje) {
+        errorLabel.setText(mensaje);
+    }
+
 
 
 
