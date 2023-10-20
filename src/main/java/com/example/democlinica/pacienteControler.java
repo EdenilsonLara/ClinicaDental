@@ -2,6 +2,8 @@ package com.example.democlinica;
 
 import com.example.democlinica.BaseDatos.Conexion;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,8 +11,10 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
-
+import com.example.democlinica.Paciente;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
@@ -19,22 +23,285 @@ import java.util.Optional;
 
 
 
-    public class pacienteControler {
+public class pacienteControler {
 
-        @FXML
-        private TextField nombresTextField;
-        @FXML
-        private TextField apellidosTextField;
-        @FXML
-        private DatePicker fechaNacimientoDatePicker;
-        @FXML
-        private SplitMenuButton generoSplitMenuButton;
-        @FXML
-        private TextField telefonoTextField;
-        @FXML
-        private TextField duiTextField;
-        @FXML
-        private TableView<Paciente> pacientesTableView;
+    @FXML
+    private TextField nombresTextField;
+    @FXML
+    private TextField apellidosTextField;
+    @FXML
+    private DatePicker fechaNacimientoDatePicker;
+    @FXML
+    private SplitMenuButton generoSplitMenuButton;
+    @FXML
+    private TextField telefonoTextField;
+    @FXML
+    private TextField duiTextField;
+    @FXML
+    private TableView<Paciente> pacientesTableView;
+    @FXML
+    private TableColumn<Paciente, Integer> codigoPacienteColumn;
+
+    @FXML
+    private TableColumn<Paciente, String> nombresPacienteColumn;
+
+    @FXML
+    private TableColumn<Paciente, String> apellidosPacienteColumn;
+
+    @FXML
+    private TableColumn<Paciente, String> generoColumn;
+
+    @FXML
+    private TableColumn<Paciente, Date> fechaNacimientoColumn;
+
+    @FXML
+    private TableColumn<Paciente, String> duiColumn;
+
+    @FXML
+    private TableColumn<Paciente, String> telefonoColumn;
+
+
+    private ObservableList<Paciente> pacientes = FXCollections.observableArrayList();
+
+
+    @FXML
+    private void guardarPaciente(ActionEvent event) throws SQLException {
+        String nombres = nombresTextField.getText();
+        String apellidos = apellidosTextField.getText();
+        LocalDate fechaNacimiento = fechaNacimientoDatePicker.getValue();
+        String genero = generoSplitMenuButton.getText();
+        String telefono = telefonoTextField.getText();
+        String dui = duiTextField.getText();
+
+        Connection conn = null;
+        try {
+            conn = Conexion.getConnection();
+            String sql = "INSERT INTO tablaDePacientes (nombresPaciente, apellidosPaciente, fechaNacimiento, genero, telefono, dui) VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, nombres);
+            pstmt.setString(2, apellidos);
+            pstmt.setDate(3, Date.valueOf(fechaNacimiento));
+            pstmt.setString(4, genero);
+            pstmt.setString(5, telefono);
+            pstmt.setString(6, dui);
+
+            int filasAfectadas = pstmt.executeUpdate();
+
+            if (filasAfectadas > 0) {
+                mostrarAlerta("Paciente Guardado", "El paciente se ha guardado correctamente en la base de datos.");
+            } else {
+                mostrarAlerta("Error", "No se pudo guardar el paciente en la base de datos.");
+            }
+
+            pstmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            mostrarAlerta("Error de Base de Datos", "Hubo un error al conectar con la base de datos.");
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            actualizarTablaPacientes();
+        }
+
+        limpiarCampos();
+    }
+
+    @FXML
+    private void initialize() {
+        // Configura las columnas para mostrar los datos
+        codigoPacienteColumn.setCellValueFactory(new PropertyValueFactory<>("codigoPaciente"));
+        nombresPacienteColumn.setCellValueFactory(new PropertyValueFactory<>("nombresPaciente"));
+        apellidosPacienteColumn.setCellValueFactory(new PropertyValueFactory<>("apellidosPaciente"));
+        generoColumn.setCellValueFactory(new PropertyValueFactory<>("genero"));
+        fechaNacimientoColumn.setCellValueFactory(new PropertyValueFactory<>("fechaNacimiento"));
+        telefonoColumn.setCellValueFactory(new PropertyValueFactory<>("telefono"));
+        duiColumn.setCellValueFactory(new PropertyValueFactory<>("dui"));
+
+        // Habilita la edición en las columnas necesarias (por ejemplo, nombresPaciente, apellidosPaciente, etc.)
+        nombresPacienteColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        nombresPacienteColumn.setOnEditCommit(event -> {
+            Paciente paciente = event.getRowValue();
+            paciente.setNombresPaciente(event.getNewValue());
+            actualizarPacienteEnBaseDeDatos(paciente);
+        });
+
+        apellidosPacienteColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        apellidosPacienteColumn.setOnEditCommit(event -> {
+            Paciente paciente = event.getRowValue();
+            paciente.setApellidosPaciente(event.getNewValue());
+            actualizarPacienteEnBaseDeDatos(paciente);
+        });
+
+        // Configura la TableView para permitir la edición
+        pacientesTableView.setEditable(true);
+
+        // Llama a la función para cargar los pacientes desde la base de datos
+        try {
+            actualizarTablaPacientes();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    @FXML
+    private void editarPaciente(ActionEvent event) {
+        Paciente pacienteSeleccionado = pacientesTableView.getSelectionModel().getSelectedItem();
+        if (pacienteSeleccionado != null) {
+            // Obtener datos del paciente seleccionado
+            String nuevosNombres = nombresTextField.getText();
+            String nuevosApellidos = apellidosTextField.getText();
+            LocalDate nuevaFechaNacimiento = fechaNacimientoDatePicker.getValue();
+            String nuevoGenero = generoSplitMenuButton.getText();
+            String nuevoTelefono = telefonoTextField.getText();
+            String nuevoDUI = duiTextField.getText();
+
+            // Realiza validación de campos, similar a tratamientoController
+
+            try {
+                Connection conn = Conexion.getConnection();
+                String sql = "UPDATE tablaDePacientes SET Nombres = ?, Apellidos = ?, FechaNacimiento = ?, Genero = ?, Telefono = ?, DUI = ? WHERE IdPaciente = ?";
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+                pstmt.setString(1, nuevosNombres);
+                pstmt.setString(2, nuevosApellidos);
+                pstmt.setDate(3, Date.valueOf(nuevaFechaNacimiento));
+                pstmt.setString(4, nuevoGenero);
+                pstmt.setString(5, nuevoTelefono);
+                pstmt.setString(6, nuevoDUI);
+                pstmt.setInt(7, pacienteSeleccionado.getCodigoPaciente());
+
+                int filasActualizadas = pstmt.executeUpdate();
+
+                if (filasActualizadas > 0) {
+                    mostrarAlerta("Paciente Actualizado", "Los datos del paciente se han actualizado correctamente en la base de datos.");
+                    actualizarTablaPacientes();
+                } else {
+                    mostrarAlerta("Error", "No se pudo actualizar el paciente en la base de datos.");
+                }
+
+                pstmt.close();
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                mostrarAlerta("Error de Base de Datos", "Hubo un error al conectar con la base de datos.");
+            }
+        }
+    }
+
+    @FXML
+    private void eliminarPaciente(ActionEvent event) {
+        Paciente pacienteSeleccionado = pacientesTableView.getSelectionModel().getSelectedItem();
+        if (pacienteSeleccionado != null) {
+            try {
+                Connection conn = Conexion.getConnection();
+                String sql = "DELETE FROM tablaDePacientes WHERE codigoPaciente = ?";
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+                pstmt.setInt(1, pacienteSeleccionado.getCodigoPaciente());
+
+                int filasAfectadas = pstmt.executeUpdate();
+
+                if (filasAfectadas > 0) {
+                    mostrarAlerta("Paciente Eliminado", "El paciente se ha eliminado correctamente de la base de datos.");
+                    actualizarTablaPacientes();
+                } else {
+                    mostrarAlerta("Error", "No se pudo eliminar el paciente de la base de datos.");
+                }
+
+                pstmt.close();
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                mostrarAlerta("Error de Base de Datos", "Hubo un error al conectar con la base de datos.");
+            }
+        }
+    }
+
+    @FXML
+    private void limpiarCampos() {
+        nombresTextField.clear();
+        apellidosTextField.clear();
+        fechaNacimientoDatePicker.setValue(null);
+        generoSplitMenuButton.setText("");
+        telefonoTextField.clear();
+        duiTextField.clear();
+    }
+
+
+
+    private void actualizarTablaPacientes() throws SQLException {
+        pacientes.clear();
+        Connection conn = Conexion.getConnection();
+        String sql = "SELECT * FROM tablaDePacientes";
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                int codigoPaciente = rs.getInt("codigoPaciente");
+                String nombresPaciente = rs.getString("nombresPaciente");
+                String apellidosPaciente = rs.getString("apellidosPaciente");
+                LocalDate fechaNacimiento = rs.getDate("fechaNacimiento").toLocalDate();
+                String genero = rs.getString("genero");
+                String telefono = rs.getString("telefono");
+                String dui = rs.getString("dui");
+                Paciente paciente = new Paciente(codigoPaciente, nombresPaciente, apellidosPaciente, fechaNacimiento, genero, telefono, dui);
+                pacientes.add(paciente);
+            }
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        pacientesTableView.setItems(pacientes);
+    }
+
+    private void actualizarPacienteEnBaseDeDatos(Paciente paciente) {
+        try {
+            Connection conn = Conexion.getConnection();
+            String sql = "UPDATE tablaDePacientes SET nombresPaciente = ?, apellidosPaciente = ?, fechaNacimiento = ?, genero = ?, telefono = ?, dui = ? WHERE codigoPaciente = ?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, paciente.getNombresPaciente());
+            pstmt.setString(2, paciente.getApellidosPaciente());
+            pstmt.setDate(3, Date.valueOf(paciente.getFechaNacimiento()));
+            pstmt.setString(4, paciente.getGenero());
+            pstmt.setString(5, paciente.getTelefono());
+            pstmt.setString(6, paciente.getDui());
+            pstmt.setInt(7, paciente.getCodigoPaciente());
+
+            int filasActualizadas = pstmt.executeUpdate();
+
+            if (filasActualizadas > 0) {
+                mostrarAlerta("Paciente Actualizado", "Los datos del paciente se han actualizado correctamente en la base de datos.");
+            } else {
+                mostrarAlerta("Error", "No se pudo actualizar el paciente en la base de datos.");
+            }
+
+            pstmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            mostrarAlerta("Error de Base de Datos", "Hubo un error al conectar con la base de datos.");
+        }
+    }
+
+
+
+
+
+    private void mostrarAlerta(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
 
 
         @FXML

@@ -101,7 +101,7 @@
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Label>
-    <Button layoutX="445.0" layoutY="263.0" mnemonicParsing="false" text="Guardar">
+    <Button layoutX="445.0" layoutY="263.0" mnemonicParsing="false" onAction="#guardarPaciente" text="Guardar">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>
@@ -116,21 +116,21 @@
     <DatePicker fx:id="fechaNacimientoDatePicker" layoutX="782.0" layoutY="97.0" />
     <TableView fx:id="pacientesTableView" layoutX="192.0" layoutY="309.0" prefHeight="200.0" prefWidth="766.0">
         <columns>
-            <TableColumn prefWidth="82.20001220703125" text="CodigoPaciente" />
-            <TableColumn prefWidth="100.0" text="Nombres" />
-            <TableColumn prefWidth="126.0" text="Apellidos" />
-            <TableColumn prefWidth="116.0" text="Genero" />
-            <TableColumn prefWidth="117.0" text="Fecha" />
-         <TableColumn prefWidth="109.0" text="Telefono" />
-         <TableColumn prefWidth="130.0" text="Dui" />
+            <TableColumn fx:id="codigoPacienteColumn" prefWidth="82.20001220703125" text="CodigoPaciente" />
+            <TableColumn fx:id="nombresPacienteColumn" prefWidth="100.0" text="Nombres" />
+            <TableColumn fx:id="apellidosPacienteColumn" prefWidth="126.0" text="Apellidos" />
+            <TableColumn fx:id="generoColumn" prefWidth="116.0" text="Genero" />
+            <TableColumn fx:id="fechaNacimientoColumn" prefWidth="117.0" text="Fecha" />
+         <TableColumn fx:id="telefonoColumn" prefWidth="109.0" text="Telefono" />
+         <TableColumn fx:id="duiColumn" prefWidth="130.0" text="Dui" />
         </columns>
     </TableView>
-    <Button layoutX="444.0" layoutY="528.0" mnemonicParsing="false" text="Eliminar">
+    <Button layoutX="444.0" layoutY="528.0" mnemonicParsing="false" onAction="#eliminarPaciente" text="Eliminar">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Button>
-    <Button layoutX="592.0" layoutY="528.0" mnemonicParsing="false" text="Actualizar">
+    <Button layoutX="592.0" layoutY="528.0" mnemonicParsing="false" onAction="#editarPaciente" text="Actualizar">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>
