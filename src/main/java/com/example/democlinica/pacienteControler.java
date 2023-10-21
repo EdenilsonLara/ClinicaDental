@@ -194,6 +194,8 @@ public class pacienteControler {
         }
     }
 
+
+
     @FXML
     private void eliminarPaciente(ActionEvent event) {
         Paciente pacienteSeleccionado = pacientesTableView.getSelectionModel().getSelectedItem();

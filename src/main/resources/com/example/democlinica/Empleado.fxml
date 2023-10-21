@@ -96,7 +96,7 @@
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Label>
-    <Button layoutX="446.0" layoutY="265.0" mnemonicParsing="false" text="Guardar">
+    <Button layoutX="446.0" layoutY="265.0" mnemonicParsing="false" onAction="#crearEmpleado" text="Guardar">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>
@@ -106,25 +106,25 @@
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Button>
-    <TextField layoutX="370.0" layoutY="106.0" prefHeight="26.0" prefWidth="274.0" />
-    <TextField layoutX="783.0" layoutY="159.0" prefHeight="26.0" prefWidth="135.0" />
-    <TableView layoutX="192.0" layoutY="309.0" prefHeight="200.0" prefWidth="766.0">
+    <TextField fx:id="nombresTextField" layoutX="370.0" layoutY="106.0" prefHeight="26.0" prefWidth="274.0" />
+    <TextField fx:id="duiTextField" layoutX="783.0" layoutY="159.0" prefHeight="26.0" prefWidth="135.0" />
+    <TableView fx:id="empleadosTable" layoutX="192.0" layoutY="309.0" prefHeight="200.0" prefWidth="766.0">
         <columns>
-            <TableColumn prefWidth="82.20001220703125" text="CodigoEmpleados" />
-            <TableColumn prefWidth="108.0" text="Nombres" />
-            <TableColumn prefWidth="116.0" text="Apellidos" />
-            <TableColumn prefWidth="116.0" text="Fecha" />
-            <TableColumn prefWidth="125.0" text="Genero" />
-            <TableColumn prefWidth="103.0" text="Dui" />
-            <TableColumn prefWidth="117.0" text="Telefono" />
+            <TableColumn fx:id="codigoColumn" prefWidth="82.20001220703125" text="CodigoEmpleados" />
+            <TableColumn fx:id="nombresColumn" prefWidth="108.0" text="Nombres" />
+            <TableColumn fx:id="apellidosColumn" prefWidth="116.0" text="Apellidos" />
+            <TableColumn fx:id="fechaNacimientoColumn" prefWidth="116.0" text="Fecha" />
+            <TableColumn fx:id="generoColumn" prefWidth="125.0" text="Genero" />
+            <TableColumn fx:id="duiColumn" prefWidth="103.0" text="Dui" />
+            <TableColumn fx:id="telefonoColumn" prefWidth="117.0" text="Telefono" />
         </columns>
     </TableView>
-    <Button layoutX="444.0" layoutY="528.0" mnemonicParsing="false" text="Eliminar">
+    <Button layoutX="444.0" layoutY="528.0" mnemonicParsing="false" onAction="#eliminarEmpleado" text="Eliminar">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Button>
-    <Button layoutX="592.0" layoutY="528.0" mnemonicParsing="false" text="Actualizar">
+    <Button layoutX="592.0" layoutY="528.0" mnemonicParsing="false" onAction="#editarEmpleado" text="Actualizar">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>
@@ -139,19 +139,19 @@
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Label>
-    <TextField layoutX="783.0" layoutY="214.0" prefHeight="26.0" prefWidth="135.0" />
+    <TextField fx:id="telefonoTextField" layoutX="783.0" layoutY="214.0" prefHeight="26.0" prefWidth="135.0" />
    <Label layoutX="204.0" layoutY="152.0" prefHeight="39.0" prefWidth="153.0" text="Apellidos :">
       <font>
          <Font name="Arial Bold" size="14.0" />
       </font>
    </Label>
-   <TextField layoutX="370.0" layoutY="159.0" prefHeight="26.0" prefWidth="274.0" />
-   <SplitMenuButton layoutX="786.0" layoutY="107.0" mnemonicParsing="false" text="SplitMenuButton">
+   <TextField fx:id="apellidosTextField" layoutX="370.0" layoutY="159.0" prefHeight="26.0" prefWidth="274.0" />
+   <SplitMenuButton fx:id="generoSplitMenuButton" layoutX="786.0" layoutY="107.0" mnemonicParsing="false" text="SplitMenuButton">
      <items>
        <MenuItem mnemonicParsing="false" text="Action 1" />
        <MenuItem mnemonicParsing="false" text="Action 2" />
      </items>
    </SplitMenuButton>
-   <DatePicker layoutX="370.0" layoutY="214.0" />
+   <DatePicker fx:id="fechaNacimientoDatePicker" layoutX="370.0" layoutY="214.0" />
 
 </AnchorPane>
