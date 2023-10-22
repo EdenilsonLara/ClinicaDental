@@ -87,7 +87,7 @@
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Label>
-    <Button layoutX="446.0" layoutY="263.0" mnemonicParsing="false" text="Guardar">
+    <Button layoutX="446.0" layoutY="263.0" mnemonicParsing="false" onAction="#guardarProveedor" text="Guardar">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>
@@ -97,34 +97,34 @@
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Button>
-    <TextField layoutX="371.0" layoutY="129.0" prefHeight="26.0" prefWidth="183.0" />
-    <TextField layoutX="371.0" layoutY="182.0" prefHeight="25.0" prefWidth="183.0" />
-    <TableView layoutX="192.0" layoutY="309.0" prefHeight="200.0" prefWidth="766.0">
+    <TextField fx:id="nombresProveedorTextField" layoutX="371.0" layoutY="129.0" prefHeight="26.0" prefWidth="183.0" />
+    <TextField fx:id="telefonoProveedorTextField" layoutX="371.0" layoutY="182.0" prefHeight="25.0" prefWidth="183.0" />
+    <TableView fx:id="proveedoresTableView" layoutX="192.0" layoutY="309.0" prefHeight="200.0" prefWidth="766.0">
         <columns>
-            <TableColumn prefWidth="82.20001220703125" text="CodigoProveedor" />
-            <TableColumn prefWidth="125.0" text="Nombre " />
-            <TableColumn prefWidth="122.0" text="Telefono" />
-            <TableColumn prefWidth="142.0" text="Direccion" />
-            <TableColumn prefWidth="155.0" text="Nombre Contacto" />
+            <TableColumn fx:id="codigoProveedorColumn" prefWidth="82.20001220703125" text="CodigoProveedor" />
+            <TableColumn fx:id="nombresProveedorColumn" prefWidth="125.0" text="Nombre " />
+            <TableColumn fx:id="telefonoProveedorColumn" prefWidth="122.0" text="Telefono" />
+            <TableColumn fx:id="direccionProveedorColumn" prefWidth="142.0" text="Direccion" />
+            <TableColumn fx:id="nombreContactoProveedorColumn" prefWidth="291.0" text="Nombre Contacto" />
         </columns>
     </TableView>
-    <Button layoutX="444.0" layoutY="528.0" mnemonicParsing="false" text="Eliminar">
+    <Button layoutX="444.0" layoutY="528.0" mnemonicParsing="false" onAction="#eliminarProveedor" text="Eliminar">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Button>
-    <Button layoutX="592.0" layoutY="528.0" mnemonicParsing="false" text="Actualizar">
+    <Button layoutX="592.0" layoutY="528.0" mnemonicParsing="false" onAction="#editarProveedor" text="Actualizar">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Button>
-    <TextField layoutX="371.0" layoutY="230.0" prefHeight="25.0" prefWidth="183.0" />
+    <TextField fx:id="direccionProveedorTextField" layoutX="371.0" layoutY="230.0" prefHeight="25.0" prefWidth="183.0" />
     <Label layoutX="205.0" layoutY="175.0" prefHeight="39.0" prefWidth="98.0" text="Telefono :">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Label>
-    <TextField layoutX="745.0" layoutY="123.0" prefHeight="26.0" prefWidth="183.0" />
+    <TextField fx:id="nombreContactoProveedorTextField" layoutX="745.0" layoutY="123.0" prefHeight="26.0" prefWidth="183.0" />
    <Label layoutX="604.0" layoutY="117.0" prefHeight="39.0" prefWidth="122.0" text="NombreContacto:">
       <font>
          <Font name="Arial Bold" size="14.0" />

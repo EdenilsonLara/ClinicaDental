@@ -295,8 +295,6 @@ public class pacienteControler {
 
 
 
-
-
     private void mostrarAlerta(String titulo, String mensaje) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(titulo);
