@@ -1,20 +1,311 @@
 package com.example.democlinica;
 
+import com.example.democlinica.BaseDatos.Conexion;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
+import javafx.util.converter.DoubleStringConverter;
+import javafx.util.converter.IntegerStringConverter;
 
 import java.io.IOException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import com.example.democlinica.ItemInventario;
 
 public class inventarioController {
+
+    @FXML
+    private TextField nombreEquipoTextField;
+    @FXML
+    private TextField descripcionTextField;
+    @FXML
+    private TextField precioTextField;
+    @FXML
+    private TextField cantidadTextField;
+    @FXML
+    private TextField codigoProveedorTextField;
+
+    @FXML
+    private TableView<ItemInventario> inventarioTableView;
+    @FXML
+    private TableColumn<ItemInventario, Integer> codigoInventarioColumn;
+    @FXML
+    private TableColumn<ItemInventario, String> nombreEquipoColumn;
+    @FXML
+    private TableColumn<ItemInventario, String> descripcionColumn;
+    @FXML
+    private TableColumn<ItemInventario, Double> precioColumn;
+    @FXML
+    private TableColumn<ItemInventario, Integer> cantidadColumn;
+    @FXML
+    private TableColumn<ItemInventario, Integer> codigoProveedorColumn;
+    private int codigoProveedor;
+
+    private ObservableList<ItemInventario> inventario = FXCollections.observableArrayList();
+
+
+
+    @FXML
+    private void guardarInventario(ActionEvent event) throws SQLException {
+        String nombreEquipo = nombreEquipoTextField.getText();
+        String descripcion = descripcionTextField.getText();
+        double precio = Double.parseDouble(precioTextField.getText());
+        int cantidad = Integer.parseInt(cantidadTextField.getText());
+        int codigoProveedor = Integer.parseInt(codigoProveedorTextField.getText());
+
+
+        Connection conn = null;
+
+        try {
+            conn = Conexion.getConnection();
+            String sql = "INSERT INTO tablaDeInventario (nombreEquipo, descripcion, precio, cantidad, codigoProveedor) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, nombreEquipo);
+            pstmt.setString(2, descripcion);
+            pstmt.setDouble(3, precio);
+            pstmt.setInt(4, cantidad);
+            pstmt.setInt(5, codigoProveedor);
+
+            int filasAfectadas = pstmt.executeUpdate();
+
+            if (filasAfectadas > 0) {
+                mostrarAlerta("Inventario Guardado", "El artículo se ha guardado correctamente en la base de datos.");
+            } else {
+                mostrarAlerta("Error", "No se pudo guardar el artículo en la base de datos.");
+            }
+
+            pstmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            mostrarAlerta("Error de Base de Datos", "Hubo un error al conectar con la base de datos.");
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            // Actualiza la tabla de inventario.
+            actualizarTablaInventario();
+        }
+
+        limpiarCampos();
+    }
+
+    @FXML
+    private void initialize() {
+        // Configura las columnas para mostrar los datos
+        codigoInventarioColumn.setCellValueFactory(new PropertyValueFactory<>("codigoInventario"));
+        nombreEquipoColumn.setCellValueFactory(new PropertyValueFactory<>("nombreEquipo"));
+        descripcionColumn.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
+        precioColumn.setCellValueFactory(new PropertyValueFactory<>("precio"));
+        cantidadColumn.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
+        codigoProveedorColumn.setCellValueFactory(new PropertyValueFactory<>("codigoProveedor"));
+
+        // Habilita la edición en las columnas necesarias (por ejemplo, nombreEquipo, descripcion, precio, cantidad, etc.)
+        nombreEquipoColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        nombreEquipoColumn.setOnEditCommit(event -> {
+            ItemInventario item = event.getRowValue();
+            item.setNombreEquipo(event.getNewValue());
+            actualizarItemEnBaseDeDatos(item);
+        });
+
+        descripcionColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        descripcionColumn.setOnEditCommit(event -> {
+            ItemInventario item = event.getRowValue();
+            item.setDescripcion(event.getNewValue());
+            actualizarItemEnBaseDeDatos(item);
+        });
+
+        precioColumn.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
+        precioColumn.setOnEditCommit(event -> {
+            ItemInventario item = event.getRowValue();
+            item.setPrecio(event.getNewValue());
+            actualizarItemEnBaseDeDatos(item);
+        });
+
+        cantidadColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+        cantidadColumn.setOnEditCommit(event -> {
+            ItemInventario item = event.getRowValue();
+            item.setCantidad(event.getNewValue());
+            actualizarItemEnBaseDeDatos(item);
+        });
+
+        // Configura la TableView para permitir la edición
+        inventarioTableView.setEditable(true);
+
+        // Llama a la función para cargar los artículos de inventario desde la base de datos
+        try {
+            actualizarTablaInventario();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @FXML
+    private void editarInventario(ActionEvent event) {
+        // Obtener el artículo de inventario seleccionado
+        ItemInventario itemSeleccionado = inventarioTableView.getSelectionModel().getSelectedItem();
+
+        if (itemSeleccionado != null) {
+            // Obtener los nuevos datos del artículo de inventario
+            String nuevoNombreEquipo = nombreEquipoTextField.getText();
+            String nuevaDescripcion = descripcionTextField.getText();
+            double nuevoPrecio = Double.parseDouble(precioTextField.getText());
+            int nuevaCantidad = Integer.parseInt(cantidadTextField.getText());
+            int nuevoCodigoProveedor = Integer.parseInt(codigoProveedorTextField.getText());
+
+            // Realiza la validación de campos, si es necesario
+
+            try {
+                Connection conn = Conexion.getConnection();
+                String sql = "UPDATE tablaDeInventario SET nombreEquipo = ?, descripcion = ?, precio = ?, cantidad = ?, codigoProveedor = ? WHERE codigoInventario = ?";
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+                pstmt.setString(1, nuevoNombreEquipo);
+                pstmt.setString(2, nuevaDescripcion);
+                pstmt.setDouble(3, nuevoPrecio);
+                pstmt.setInt(4, nuevaCantidad);
+                pstmt.setInt(5, nuevoCodigoProveedor);
+                pstmt.setInt(6, itemSeleccionado.getCodigoInventario());
+
+                int filasActualizadas = pstmt.executeUpdate();
+
+                if (filasActualizadas > 0) {
+                    mostrarAlerta("Inventario Actualizado", "Los datos del artículo de inventario se han actualizado correctamente en la base de datos.");
+                    actualizarTablaInventario();
+                } else {
+                    mostrarAlerta("Error", "No se pudo actualizar el artículo de inventario en la base de datos.");
+                }
+
+                pstmt.close();
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                mostrarAlerta("Error de Base de Datos", "Hubo un error al conectar con la base de datos.");
+            }
+        }
+    }
+
+    @FXML
+    private void eliminarInventario(ActionEvent event) {
+        // Obtener el artículo de inventario seleccionado
+        ItemInventario itemSeleccionado = inventarioTableView.getSelectionModel().getSelectedItem();
+
+        if (itemSeleccionado != null) {
+            try {
+                Connection conn = Conexion.getConnection();
+                String sql = "DELETE FROM tablaDeInventario WHERE codigoInventario = ?";
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+                pstmt.setInt(1, itemSeleccionado.getCodigoInventario());
+
+                int filasAfectadas = pstmt.executeUpdate();
+
+                if (filasAfectadas > 0) {
+                    mostrarAlerta("Artículo de Inventario Eliminado", "El artículo de inventario se ha eliminado correctamente de la base de datos.");
+                    actualizarTablaInventario();
+                } else {
+                    mostrarAlerta("Error", "No se pudo eliminar el artículo de inventario de la base de datos.");
+                }
+
+                pstmt.close();
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                mostrarAlerta("Error de Base de Datos", "Hubo un error al conectar con la base de datos.");
+            }
+        }
+    }
+
+    @FXML
+    private void limpiarCampos() {
+        nombreEquipoTextField.clear();
+        descripcionTextField.clear();
+        precioTextField.clear();
+        cantidadTextField.clear();
+        codigoProveedorTextField.clear();
+    }
+
+
+    private void actualizarTablaInventario() throws SQLException {
+        // Limpiar la lista de artículos de inventario
+        inventario.clear();
+        Connection conn = Conexion.getConnection();
+        String sql = "SELECT * FROM tablaDeInventario";
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                int codigoInventario = rs.getInt("codigoInventario");
+                String nombreEquipo = rs.getString("nombreEquipo");
+                String descripcion = rs.getString("descripcion");
+                double precio = rs.getDouble("precio");
+                int cantidad = rs.getInt("cantidad");
+                int codigoProveedor = rs.getInt("codigoProveedor");
+                ItemInventario item = new ItemInventario(codigoInventario, nombreEquipo, descripcion, precio, cantidad, codigoProveedor);
+                inventario.add(item);
+            }
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // Actualizar la tabla con los datos del inventario
+        inventarioTableView.setItems(inventario);
+    }
+
+    private void actualizarItemEnBaseDeDatos(ItemInventario item) {
+        try {
+            Connection conn = Conexion.getConnection();
+            String sql = "UPDATE tablaDeInventario SET nombreEquipo = ?, descripcion = ?, precio = ?, cantidad = ?, codigoProveedor = ? WHERE codigoInventario = ?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, item.getNombreEquipo());
+            pstmt.setString(2, item.getDescripcion());
+            pstmt.setDouble(3, item.getPrecio());
+            pstmt.setInt(4, item.getCantidad());
+            pstmt.setInt(5, item.getCodigoProveedor());
+            pstmt.setInt(6, item.getCodigoInventario());
+
+            int filasActualizadas = pstmt.executeUpdate();
+
+            if (filasActualizadas > 0) {
+                mostrarAlerta("Item de Inventario Actualizado", "Los datos del artículo de inventario se han actualizado correctamente en la base de datos.");
+            } else {
+                mostrarAlerta("Error", "No se pudo actualizar el artículo de inventario en la base de datos.");
+            }
+
+            pstmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            mostrarAlerta("Error de Base de Datos", "Hubo un error al conectar con la base de datos.");
+        }
+    }
+
+    private void mostrarAlerta(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
+
     @FXML
     private void irAInventario(ActionEvent event) throws IOException {
         // Cargar la vista de inventario desde inventario.fxml

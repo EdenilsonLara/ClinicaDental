@@ -92,7 +92,7 @@
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Label>
-    <Button layoutX="445.0" layoutY="263.0" mnemonicParsing="false" text="Guardar">
+    <Button layoutX="445.0" layoutY="263.0" mnemonicParsing="false" onAction="#guardarInventario" text="Guardar">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>
@@ -102,25 +102,25 @@
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Button>
-    <TextField layoutX="371.0" layoutY="129.0" prefHeight="26.0" prefWidth="274.0" />
-    <TextField layoutX="371.0" layoutY="182.0" prefHeight="25.0" prefWidth="273.0" />
-    <TextField layoutX="817.0" layoutY="130.0" prefHeight="26.0" prefWidth="86.0" />
-    <TableView layoutX="192.0" layoutY="309.0" prefHeight="200.0" prefWidth="766.0">
+    <TextField fx:id="nombreEquipoTextField" layoutX="371.0" layoutY="129.0" prefHeight="26.0" prefWidth="274.0" />
+    <TextField fx:id="descripcionTextField" layoutX="371.0" layoutY="182.0" prefHeight="25.0" prefWidth="273.0" />
+    <TextField fx:id="cantidadTextField" layoutX="817.0" layoutY="130.0" prefHeight="26.0" prefWidth="86.0" />
+    <TableView fx:id="inventarioTableView" layoutX="192.0" layoutY="309.0" prefHeight="200.0" prefWidth="766.0">
         <columns>
-            <TableColumn prefWidth="82.20001220703125" text="CodigoInventario" />
-            <TableColumn prefWidth="150.4000244140625" text="Nombre Del Equipo" />
-            <TableColumn prefWidth="177.60000610351562" text="Descripcion" />
-            <TableColumn prefWidth="147.7999267578125" text="Precio" />
-            <TableColumn prefWidth="100.0" text="Cantidad" />
-            <TableColumn prefWidth="100.0" text="Proveedor" />
+            <TableColumn fx:id="codigoInventarioColumn" prefWidth="82.20001220703125" text="CodigoInventario" />
+            <TableColumn fx:id="nombreEquipoColumn" prefWidth="150.4000244140625" text="Nombre Del Equipo" />
+            <TableColumn fx:id="descripcionColumn" prefWidth="177.60000610351562" text="Descripcion" />
+            <TableColumn fx:id="precioColumn" prefWidth="147.7999267578125" text="Precio" />
+            <TableColumn fx:id="cantidadColumn" prefWidth="100.0" text="Cantidad" />
+            <TableColumn fx:id="codigoProveedorColumn" prefWidth="100.0" text="Proveedor" />
         </columns>
     </TableView>
-    <Button layoutX="444.0" layoutY="528.0" mnemonicParsing="false" text="Eliminar">
+    <Button layoutX="444.0" layoutY="528.0" mnemonicParsing="false" onAction="#eliminarInventario" text="Eliminar">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Button>
-    <Button layoutX="592.0" layoutY="528.0" mnemonicParsing="false" text="Actualizar">
+    <Button layoutX="592.0" layoutY="528.0" mnemonicParsing="false" onAction="#editarInventario" text="Actualizar">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>
@@ -135,7 +135,7 @@
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Label>
-    <TextField layoutX="817.0" layoutY="182.0" prefHeight="26.0" prefWidth="86.0" />
-   <TextField layoutX="371.0" layoutY="230.0" prefHeight="26.0" prefWidth="86.0" />
+    <TextField fx:id="codigoProveedorTextField" layoutX="817.0" layoutY="182.0" prefHeight="26.0" prefWidth="86.0" />
+   <TextField fx:id="precioTextField" layoutX="371.0" layoutY="230.0" prefHeight="26.0" prefWidth="86.0" />
 
 </AnchorPane>
