@@ -2,6 +2,8 @@ package com.example.democlinica;
 
 import com.example.democlinica.BaseDatos.Conexion;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,17 +12,21 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 
 
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javafx.scene.control.TextField;
+
 
 public class citasController {
 
@@ -42,99 +48,400 @@ public class citasController {
     private TextField codigoPacienteTextField;
     @FXML
     private Label errorLabel;
+    @FXML
+    private TableColumn<Cita, Integer> codigoCitaColumn;
+    @FXML
+    private TableColumn<Cita, String> nombresPacienteColumn;
+    @FXML
+    private TableColumn<Cita, String> apellidosPacienteColumn;
+    @FXML
+    private TableColumn<Cita, String> motivoConsultaColumn;
+    @FXML
+    private TableColumn<Cita, Integer> codigoTratamientoColumn;
+    @FXML
+    private TableColumn<Cita, String> costoColumn;
+    @FXML
+    private TableColumn<Cita, LocalDate> fechaColumn;
+    @FXML
+    private TableColumn<Cita, String> estadoColumn;
+    @FXML
+    private TableColumn<Cita, Integer> codigoPacienteColumn;
+    @FXML
+    private TableView<Cita> citasTableView;
+    @FXML
+    private TextField codigoCitaTextField;
+
+
+
+    private ObservableList<Cita> citas = FXCollections.observableArrayList();
+
+
+
+
+
 
     @FXML
-    private void guardarCita(ActionEvent event) {
+    private void guardarCita(ActionEvent event) throws SQLException {
         String nombres = nombresTextField.getText();
         String apellidos = apellidosTextField.getText();
         String motivo = motivoTextField.getText();
-        String codigoTratamiento = codigoTratamientoTextField.getText();
-        String costo = costoTextField.getText();
-        String fechaConsulta = fechaConsultaDatePicker.getValue().toString();
+        int codigoTratamiento = Integer.parseInt(codigoTratamientoTextField.getText());
+        double costo = Double.parseDouble(costoTextField.getText());
         String estado = estadoComboBox.getValue();
-        String codigoPaciente = codigoPacienteTextField.getText();
+        int codigoPaciente = Integer.parseInt(codigoPacienteTextField.getText());
 
-        // Validación de campos
-        if (nombres.isEmpty() || apellidos.isEmpty() || motivo.isEmpty() || codigoTratamiento.isEmpty() || costo.isEmpty() || fechaConsulta.isEmpty() || estado == null ) {
-            mostrarAlerta("Campos Vacíos", "Por favor, complete todos los campos, incluyendo el estado.");
-            return;
-        }
-
-
-        if (!esValidoNombre(nombres) || !esValidoNombre(apellidos)) {
-            mostrarError("Nombres y apellidos no pueden contener números.");
-            return;
-        }
-
-
-        if (!esValidoDUI(codigoPaciente)) {
-            mostrarError("DUI inválido o formato incorrecto.");
-            return;
-        }
-
-
-        if (!esValidoTelefono(costo)) {
-            mostrarError("Costo inválido o formato incorrecto.");
-            return;
-        }
-
-
+        Connection conn = null;
         try {
-            Connection conn = Conexion.getConnection();
-            String sql = "INSERT INTO tablaDeCitas (nombresPaciente, apellidosPaciente, motivoConsulta, codigoTratamiento, costo, fecha, estado, codigoPaciente) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            conn = Conexion.getConnection();
+            String sql = "INSERT INTO tablaDeCitas (nombresPaciente, apellidosPaciente, motivoConsulta, codigoTratamiento, costo, estado, codigoPaciente) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, nombres);
             pstmt.setString(2, apellidos);
             pstmt.setString(3, motivo);
-            pstmt.setString(4, codigoTratamiento);
-            pstmt.setString(5, costo);
-            pstmt.setString(6, fechaConsulta);
-            pstmt.setString(7, estado);
-
+            pstmt.setInt(4, codigoTratamiento);
+            pstmt.setDouble(5, costo);
+            pstmt.setString(6, estado);
+            pstmt.setInt(7, codigoPaciente);
 
             int filasAfectadas = pstmt.executeUpdate();
 
             if (filasAfectadas > 0) {
                 mostrarAlerta("Cita Guardada", "La cita se ha guardado correctamente en la base de datos.");
+                actualizarTablaCitas(); // Asegúrate de tener un método para actualizar la tabla de citas
             } else {
                 mostrarAlerta("Error", "No se pudo guardar la cita en la base de datos.");
             }
 
             pstmt.close();
-            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
             mostrarAlerta("Error de Base de Datos", "Hubo un error al conectar con la base de datos.");
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        limpiarCampos();
+    }
+
+
+
+    private void mostrarAlerta(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
+    private void limpiarCampos() {
+        nombresTextField.clear();
+        apellidosTextField.clear();
+        motivoTextField.clear();
+        codigoTratamientoTextField.clear();
+        costoTextField.clear();
+        estadoComboBox.getSelectionModel().clearSelection();
+        codigoPacienteTextField.clear();
+    }
+
+    @FXML
+    private void initialize() {
+        // Configura las columnas para mostrar los datos
+        codigoCitaColumn.setCellValueFactory(new PropertyValueFactory<>("codigoCita"));
+        nombresPacienteColumn.setCellValueFactory(new PropertyValueFactory<>("nombresPaciente"));
+        apellidosPacienteColumn.setCellValueFactory(new PropertyValueFactory<>("apellidosPaciente"));
+        motivoConsultaColumn.setCellValueFactory(new PropertyValueFactory<>("motivoConsulta"));
+        codigoTratamientoColumn.setCellValueFactory(new PropertyValueFactory<>("codigoTratamiento"));
+        costoColumn.setCellValueFactory(new PropertyValueFactory<>("costo"));
+        fechaColumn.setCellValueFactory(new PropertyValueFactory<>("fecha"));
+        estadoColumn.setCellValueFactory(new PropertyValueFactory<>("estado"));
+        codigoPacienteColumn.setCellValueFactory(new PropertyValueFactory<>("codigoPaciente"));
+        codigoCitaTextField = new TextField();
+
+        // Habilita la edición en las columnas necesarias (por ejemplo, nombresPaciente, apellidosPaciente, etc.)
+        nombresPacienteColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        nombresPacienteColumn.setOnEditCommit(event -> {
+            Cita cita = event.getRowValue();
+            cita.setNombresPaciente(event.getNewValue());
+            try {
+                actualizarCitaEnBaseDeDatos(cita);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        apellidosPacienteColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        apellidosPacienteColumn.setOnEditCommit(event -> {
+            Cita cita = event.getRowValue();
+            cita.setApellidosPaciente(event.getNewValue());
+            try {
+                actualizarCitaEnBaseDeDatos(cita);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        motivoConsultaColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        motivoConsultaColumn.setOnEditCommit(event -> {
+            Cita cita = event.getRowValue();
+            cita.setMotivoConsulta(event.getNewValue());
+            try {
+                actualizarCitaEnBaseDeDatos(cita);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        // Configura la TableView para permitir la edición
+        citasTableView.setEditable(true);
+
+        // Llama a la función para cargar las citas desde la base de datos
+        try {
+            actualizarTablaCitas();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
+    @FXML
+    private void editarCita(ActionEvent event) {
+        String codigoCitaText = codigoCitaTextField.getText();
+        String nombres = nombresTextField.getText();
+        String apellidos = apellidosTextField.getText();
+        String motivo = motivoTextField.getText();
+        String codigoTratamientoText = codigoTratamientoTextField.getText();
+        String costoText = costoTextField.getText();
+        String estado = estadoComboBox.getValue();
+        String codigoPacienteText = codigoPacienteTextField.getText();
+
+        if (codigoCitaText.isEmpty() || nombres.isEmpty() || apellidos.isEmpty() || motivo.isEmpty() ||
+                codigoTratamientoText.isEmpty() || costoText.isEmpty() || estado == null || codigoPacienteText.isEmpty()) {
+            mostrarAlerta("Campos Incompletos", "Por favor, complete todos los campos obligatorios.");
+            return;
+        }
+
+        int codigoCita = 0;
+        int codigoTratamiento = 0;
+        int codigoPaciente = 0;
+        double costo = 0.0;
+
+        try {
+            codigoCita = Integer.parseInt(codigoCitaText);
+            codigoTratamiento = Integer.parseInt(codigoTratamientoText);
+            codigoPaciente = Integer.parseInt(codigoPacienteText);
+            costo = Double.parseDouble(costoText);
+        } catch (NumberFormatException e) {
+            mostrarAlerta("Error de Entrada", "Los campos de código de cita, código de tratamiento, costo y código de paciente deben ser números válidos.");
+            return;
+        }
+
+        // Verificar si la cita existe antes de intentar actualizar
+        if (!citaExiste(codigoCita)) {
+            mostrarAlerta("Cita No Encontrada", "No se encontró una cita con el código especificado.");
+            return;
+        }
+
+        // Crear una conexión a la base de datos y realizar la actualización
+        try (Connection connection = Conexion.getConnection()) {
+            String sql = "UPDATE tablaDeCitas SET nombresPaciente = ?, apellidosPaciente = ?, motivoConsulta = ?, " +
+                    "codigoTratamiento = ?, costo = ?, estado = ?, codigoPaciente = ? WHERE codigoCita = ?";
+
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setString(1, nombres);
+                statement.setString(2, apellidos);
+                statement.setString(3, motivo);
+                statement.setInt(4, codigoTratamiento);
+                statement.setDouble(5, costo);
+                statement.setString(6, estado);
+                statement.setInt(7, codigoPaciente);
+                statement.setInt(8, codigoCita);
+
+                int filasAfectadas = statement.executeUpdate();
+
+                if (filasAfectadas > 0) {
+                    mostrarAlerta("Cita Actualizada", "La cita se ha actualizado con éxito.");
+                    limpiarCampos();
+                } else {
+                    mostrarAlerta("Error al Actualizar", "Hubo un error al actualizar la cita.");
+                }
+            }
+        } catch (SQLException e) {
+            mostrarAlerta("Error de Base de Datos", "Error al conectarse a la base de datos: " + e.getMessage());
         }
     }
 
-    // Otras funciones y métodos
+    private boolean citaExiste(int codigoCita) {
+        // Verificar si una cita con el código especificado existe en la base de datos
+        try (Connection connection = Conexion.getConnection()) {
+            String sql = "SELECT codigoCita FROM tablaDeCitas WHERE codigoCita = ?";
 
-    // Función para validar nombres y apellidos
-    private boolean esValidoNombre(String texto) {
-        return !texto.matches(".*\\d.*") && texto.length() <= 31;
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setInt(1, codigoCita);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    return resultSet.next();
+                }
+            }
+        } catch (SQLException e) {
+            mostrarAlerta("Error de Base de Datos", "Error al verificar la existencia de la cita: " + e.getMessage());
+        }
+
+        return false;
     }
 
-    // Función para validar DUI y el formato de número de identificación salvadoreño
-    private boolean esValidoDUI(String dui) {
-        // El formato del DUI es de 9 números con un guión
-        Pattern pattern = Pattern.compile("\\d{8}-\\d");
-        Matcher matcher = pattern.matcher(dui);
-        return matcher.matches();
+    @FXML
+    private void eliminarCita(ActionEvent event) {
+        // Obtener la fila seleccionada
+        Cita citaSeleccionada = citasTableView.getSelectionModel().getSelectedItem();
+
+        if (citaSeleccionada == null) {
+            mostrarAlerta("Selección de Cita", "Por favor, seleccione una cita para eliminar.");
+            return;
+        }
+
+        // Mostrar un cuadro de diálogo de confirmación antes de eliminar la cita
+        Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmacion.setTitle("Confirmación de Eliminación");
+        confirmacion.setHeaderText("¿Está seguro de que desea eliminar esta cita?");
+        confirmacion.setContentText("Esta acción no se puede deshacer. Seleccione Aceptar para confirmar o Cancelar para mantener la cita.");
+
+        Optional<ButtonType> result = confirmacion.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            // Eliminar la cita de la base de datos
+            eliminarCitaDeBaseDeDatos(citaSeleccionada.getCodigoCita());
+
+            // Eliminar la cita seleccionada de la lista de citas
+            citas.remove(citaSeleccionada);
+
+            // Actualizar la tabla de la vista
+            citasTableView.setItems(citas);
+        }
     }
 
-    // Función para validar teléfono y el formato de 8 dígitos con guión
-    private boolean esValidoTelefono(String telefono) {
-        // El formato del teléfono es de 8 números con un guión en el medio
-        Pattern pattern = Pattern.compile("\\d{4}-\\d{4}");
-        Matcher matcher = pattern.matcher(telefono);
-        return matcher.matches();
+
+    private void eliminarCitaDeBaseDeDatos(int codigoCita) {
+        // Eliminar la cita de la base de datos
+        try (Connection connection = Conexion.getConnection()) {
+            String sql = "DELETE FROM tablaDeCitas WHERE codigoCita = ?";
+
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setInt(1, codigoCita);
+                int filasAfectadas = statement.executeUpdate();
+
+                if (filasAfectadas > 0) {
+                    mostrarAlerta("Cita Eliminada", "La cita se ha eliminado con éxito.");
+                    limpiarCampos();
+                } else {
+                    mostrarAlerta("Error al Eliminar", "Hubo un error al eliminar la cita.");
+                }
+            }
+        } catch (SQLException e) {
+            mostrarAlerta("Error de Base de Datos", "Error al conectarse a la base de datos: " + e.getMessage());
+        }
+    }
+    private void actualizarTablaCitas() throws SQLException {
+        citas.clear();
+        Connection conn = Conexion.getConnection();
+        String sql = "SELECT * FROM tablaDeCitas";
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                int codigoCita = rs.getInt("codigoCita");
+                String nombresPaciente = rs.getString("nombresPaciente");
+                String apellidosPaciente = rs.getString("apellidosPaciente");
+                String motivoConsulta = rs.getString("motivoConsulta");
+                int codigoTratamiento = rs.getInt("codigoTratamiento");
+                double costo = rs.getDouble("costo");
+                Timestamp timestamp = rs.getTimestamp("fecha");
+                LocalDateTime fecha = null;
+
+                if (timestamp != null) {
+                    fecha = timestamp.toLocalDateTime();
+                }
+
+                String estado = rs.getString("estado");
+                int codigoPaciente = rs.getInt("codigoPaciente");
+                int codigoSucursal = rs.getInt("codigoSucursal");
+
+                // Crea un objeto de cita y agrégalo a la lista
+                Cita cita = new Cita(codigoCita, nombresPaciente, apellidosPaciente, motivoConsulta, codigoTratamiento, costo, fecha, estado, codigoPaciente, codigoSucursal);
+                citas.add(cita);
+            }
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        citasTableView.setItems(citas);
+    }
+    private void actualizarCitaEnBaseDeDatos(Cita cita) throws SQLException {
+        Connection conn = Conexion.getConnection();
+
+        if (conn != null) {
+            try {
+                String sql = "UPDATE tablaDeCitas SET " +
+                        "nombresPaciente = ?, " +
+                        "apellidosPaciente = ?, " +
+                        "motivoConsulta = ?, " +
+                        "codigoTratamiento = ?, " +
+                        "costo = ?, " +
+                        "fecha = ?, " +
+                        "estado = ?, " +
+                        "codigoPaciente = ? " +
+                        "WHERE codigoCita = ?";
+
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+                pstmt.setString(1, cita.getNombresPaciente());
+                pstmt.setString(2, cita.getApellidosPaciente());
+                pstmt.setString(3, cita.getMotivoConsulta());
+                pstmt.setInt(4, cita.getCodigoTratamiento());
+                pstmt.setDouble(5, cita.getCosto());
+
+                // Verifica si la fecha de la cita no es nula antes de convertirla a Timestamp
+                if (cita.getFecha() != null) {
+                    pstmt.setTimestamp(6, Timestamp.valueOf(cita.getFecha()));
+                } else {
+                    pstmt.setNull(6, Types.TIMESTAMP);
+                }
+
+                pstmt.setString(7, cita.getEstado());
+                pstmt.setInt(8, cita.getCodigoPaciente());
+                pstmt.setInt(9, cita.getCodigoCita());
+
+                int rowsUpdated = pstmt.executeUpdate();
+
+                if (rowsUpdated > 0) {
+                    System.out.println("La cita se actualizó en la base de datos.");
+                } else {
+                    System.out.println("No se pudo actualizar la cita en la base de datos.");
+                }
+
+                pstmt.close();
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    // Función para mostrar mensajes de error
-    private void mostrarError(String mensaje) {
-        errorLabel.setText(mensaje);
-    }
+
+
+
+
+
+
+
+
 
 
 
@@ -229,14 +536,6 @@ public class citasController {
         stage.show();
     }
 
-
-    private void mostrarAlerta(String titulo, String mensaje) {
-        Alert alert = new Alert(AlertType.WARNING);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
-    }
 
     @FXML
     private void irAEmpleados(ActionEvent event) throws IOException {
