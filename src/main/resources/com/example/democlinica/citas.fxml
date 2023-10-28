@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democlinica.citasController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democlinica.citasController">
 
     <Pane layoutY="71.0" prefHeight="511.0" prefWidth="183.0" style="-fx-background-color: rgb(60, 68, 87);">
         <cursor>
@@ -83,7 +83,7 @@
             <Font name="Arial Bold" size="18.0" />
         </font></Label>
 
-    <Label layoutX="633.0" layoutY="143.0" prefHeight="39.0" prefWidth="140.0" text="Fecha De Consulta:">
+    <Label layoutX="626.0" layoutY="131.0" prefHeight="39.0" prefWidth="140.0" text="Fecha De Consulta:">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>
@@ -93,7 +93,7 @@
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Label>
-    <Label layoutX="705.0" layoutY="91.0" prefHeight="39.0" prefWidth="70.0" text="Costos:">
+    <Label layoutX="705.0" layoutY="79.0" prefHeight="39.0" prefWidth="70.0" text="Costos:">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>
@@ -113,25 +113,22 @@
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Button>
-    <Button layoutX="598.0" layoutY="278.0" mnemonicParsing="false" text="Limpiar">
-        <font>
-            <Font name="Arial Bold" size="14.0" />
-        </font>
-    </Button>
+    <TextField fx:id="codigoCitaTextField" layoutX="336.0" layoutY="97.0" prefHeight="26.0" prefWidth="273.0" />
     <TextField fx:id="nombresTextField" layoutX="336.0" layoutY="97.0" prefHeight="26.0" prefWidth="273.0" />
     <TextField fx:id="apellidosTextField" layoutX="336.0" layoutY="150.0" prefHeight="25.0" prefWidth="273.0" />
     <TextField fx:id="motivoTextField" layoutX="336.0" layoutY="199.0" prefHeight="25.0" prefWidth="273.0" />
-    <TextField fx:id="costoTextField" layoutX="775.0" layoutY="98.0" prefHeight="25.0" prefWidth="74.0" />
-    <DatePicker fx:id="fechaConsultaDatePicker" layoutX="775.0" layoutY="150.0" />
+    <TextField fx:id="costoTextField" layoutX="775.0" layoutY="86.0" prefHeight="25.0" prefWidth="74.0" />
+    <DatePicker fx:id="fechaConsultaDatePicker" editable="false" layoutX="774.0" layoutY="138.0" />
     <TableView fx:id="citasTableView" layoutX="188.0" layoutY="316.0" prefHeight="196.0" prefWidth="771.0">
         <columns>
-            <TableColumn fx:id="codigoCitaColumn" prefWidth="56.0" text="CodigoCIta" />
+            <TableColumn fx:id="codigoCitaColumn" prefWidth="56.0" text="CodigoCita" />
             <TableColumn fx:id="nombresPacienteColumn" prefWidth="82.0" text="Nombres" />
             <TableColumn fx:id="apellidosPacienteColumn" prefWidth="97.0" text="Apellidos" />
             <TableColumn fx:id="motivoConsultaColumn" prefWidth="98.0" text="Motivo" />
-            <TableColumn fx:id="codigoTratamientoColumn" prefWidth="91.0" text="CodigoTratameinto" />
+            <TableColumn fx:id="codigoTratamientoColumn" prefWidth="91.0" text="CodigoTratamiento" />
             <TableColumn fx:id="costoColumn" prefWidth="91.0" text="Costo" />
             <TableColumn fx:id="fechaColumn" prefWidth="99.0" text="Fecha" />
+            <TableColumn fx:id="horaColumn" prefWidth="99.0" text="Hora" />
          <TableColumn fx:id="estadoColumn" minWidth="0.0" prefWidth="79.0" text="Estado" />
          <TableColumn fx:id="codigoPacienteColumn" prefWidth="85.0" text="CodigoPaciente" />
         </columns>
@@ -141,12 +138,12 @@
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Button>
-    <Button layoutX="592.0" layoutY="528.0" mnemonicParsing="false" onAction="#editarCita" text="Actualizar">
+    <Button layoutX="592.0" layoutY="528.0" mnemonicParsing="false" text="Actualizar">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Button>
-   <Label layoutX="705.0" layoutY="192.0" prefHeight="39.0" prefWidth="70.0" text="Estado:">
+   <Label layoutX="705.0" layoutY="212.0" prefHeight="39.0" prefWidth="70.0" text="Estado:">
       <font>
          <Font name="Arial Bold" size="14.0" />
       </font>
@@ -157,13 +154,13 @@
       </font>
    </Label>
    <TextField fx:id="codigoTratamientoTextField" layoutX="336.0" layoutY="248.0" prefHeight="25.0" prefWidth="273.0" />
-   <Label layoutX="653.0" layoutY="241.0" prefHeight="39.0" prefWidth="122.0" text="CodigoPaciente:">
+   <Label layoutX="644.0" layoutY="259.0" prefHeight="39.0" prefWidth="122.0" text="CodigoPaciente:">
       <font>
          <Font name="Arial Bold" size="14.0" />
       </font>
    </Label>
-   <TextField fx:id="codigoPacienteTextField" layoutX="775.0" layoutY="248.0" prefHeight="25.0" prefWidth="74.0" />
-   <ComboBox fx:id="estadoComboBox" layoutX="773.0" layoutY="199.0" prefWidth="150.0">
+   <TextField fx:id="codigoPacienteTextField" layoutX="775.0" layoutY="268.0" prefHeight="25.0" prefWidth="74.0" />
+   <ComboBox fx:id="estadoComboBox" layoutX="774.0" layoutY="219.0" prefWidth="150.0" promptText="Seleccione">
     <items>
         <FXCollections fx:factory="observableArrayList">
             <String fx:value="Completado" />
@@ -171,5 +168,21 @@
         </FXCollections>
     </items>
    </ComboBox>
-
+   <Label layoutX="672.0" layoutY="173.0" prefHeight="39.0" prefWidth="102.0" text="Hora de Cita:">
+      <font>
+         <Font name="Arial Bold" size="14.0" />
+      </font>
+   </Label>
+   <ComboBox fx:id="horaComboBox" layoutX="775.0" layoutY="180.0" prefWidth="150.0" promptText="Seleccione" >
+    <items>
+        <FXCollections fx:factory="observableArrayList">
+            <String fx:value="8:00 AM - 9:00 AM" />
+            <String fx:value="9:00 AM - 10:00 AM" />
+            <String fx:value="10:00 AM - 11:00 AM" />
+            <String fx:value="11:00 AM - 12:00 PM" />
+            <String fx:value="2:00 PM - 3:00 PM" />
+            <String fx:value="3:00 PM - 4:00 PM" />
+        </FXCollections>
+    </items>
+    </ComboBox>
 </AnchorPane>

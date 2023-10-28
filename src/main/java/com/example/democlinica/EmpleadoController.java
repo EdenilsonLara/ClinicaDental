@@ -66,6 +66,11 @@ public class EmpleadoController {
 
     @FXML
     private void crearEmpleado(ActionEvent event) {
+        // Validación de nombres y apellidos
+        if (!nombresTextField.getText().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$") || !apellidosTextField.getText().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$")) {
+            mostrarAlerta("Error", "Los nombres y apellidos solo deben contener letras.");
+            return;
+        }
         try (Connection connection = Conexion.getConnection();
              PreparedStatement stmt = connection.prepareStatement(
                      "INSERT INTO tablaDeEmpleados (nombresEmpleado, apellidosEmpleado, fechaNacimiento, genero, dui, telefono, codigoSucursal) VALUES (?, ?, ?, ?, ?, ?, ?)")) {

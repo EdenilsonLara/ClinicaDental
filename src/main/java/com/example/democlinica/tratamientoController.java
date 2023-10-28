@@ -63,7 +63,7 @@ public class tratamientoController {
             mostrarAlerta("Error en Tipo de Servicio", "El tipo de servicio no debe exceder los 32 caracteres.");
             return;
         }
-        if (!tipoServicio.matches("^[a-zA-Z]+$")) {
+        if (!tipoServicio.matches("^[a-zA-Z ]+$")) {
             mostrarAlerta("Error en Tipo de Servicio", "El tipo de servicio debe contener solo letras.");
             return;
         }

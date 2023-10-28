@@ -11,10 +11,49 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
+import javafx.event.ActionEvent;
+import java.io.IOException;
 import java.io.IOException;
 import java.util.Optional;
 
 public class ReportesController {
+    @FXML
+    private void generarReportePDF(ActionEvent event) {
+        // Ruta donde deseas guardar el archivo PDF
+        String rutaArchivoPDF = "C:/Users/manue/";
+
+
+        try {
+            PdfWriter pdfWriter = new PdfWriter(rutaArchivoPDF);
+            PdfDocument pdfDocument = new PdfDocument(pdfWriter);
+            Document document = new Document(pdfDocument);
+
+            // Contenido del informe PDF (puedes personalizarlo)
+            String contenido = "Este es un informe PDF generado desde JavaFX.";
+
+            // Agregar contenido al PDF
+            Paragraph paragraph = new Paragraph(contenido);
+            document.add(paragraph);
+
+            // Cerrar el documento
+            document.close();
+
+            // Mostrar un mensaje de éxito (puedes personalizarlo)
+            mostrarMensaje("Informe PDF generado con éxito.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarMensaje("Error al generar el informe PDF.");
+        }
+    }
+    private void mostrarMensaje(String mensaje) {
+        // Implementa un cuadro de diálogo o notificación para mostrar el mensaje.
+        // Puedes utilizar Alert u otro componente según tus preferencias.
+    }
+
     @FXML
     private void irATratamientos(ActionEvent event) throws IOException {
         // Cargar la vista de tratamientos desde tratamientos.fxml

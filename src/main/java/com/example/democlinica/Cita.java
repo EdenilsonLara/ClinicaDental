@@ -1,6 +1,7 @@
 package com.example.democlinica;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class Cita {
     private int codigoCita;
@@ -10,6 +11,7 @@ public class Cita {
     private int codigoTratamiento;
     private double costo;
     private LocalDateTime fecha; // Usamos LocalDateTime en lugar de null para la fecha
+    private LocalTime hora; // Campo para la hora
     private String estado;
     private int codigoPaciente;
     private int codigoSucursal;
@@ -23,6 +25,7 @@ public class Cita {
         this.codigoTratamiento = codigoTratamiento;
         this.costo = costo;
         this.fecha = fecha; // Asignamos la fecha proporcionada
+        this.hora = hora;
         this.estado = estado;
         this.codigoPaciente = codigoPaciente;
         this.codigoSucursal = codigoSucursal;
@@ -83,6 +86,13 @@ public class Cita {
     public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
+    public LocalTime getHora() {
+        return hora;
+    }
+
+    public void setHora(LocalTime hora) {
+        this.hora = hora;
+    }
 
     public String getEstado() {
         return estado;
@@ -118,6 +128,7 @@ public class Cita {
                 ", codigoTratamiento=" + codigoTratamiento +
                 ", costo=" + costo +
                 ", fecha=" + fecha +
+                ", hora=" + hora +
                 ", estado='" + estado + '\'' +
                 ", codigoPaciente=" + codigoPaciente +
                 ", codigoSucursal=" + codigoSucursal +

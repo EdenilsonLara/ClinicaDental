@@ -63,6 +63,8 @@ public class citasController {
     @FXML
     private TableColumn<Cita, LocalDate> fechaColumn;
     @FXML
+    private TableColumn<Cita, LocalDate> horaColumn;
+    @FXML
     private TableColumn<Cita, String> estadoColumn;
     @FXML
     private TableColumn<Cita, Integer> codigoPacienteColumn;
@@ -86,11 +88,42 @@ public class citasController {
         String apellidos = apellidosTextField.getText();
         String motivo = motivoTextField.getText();
         int codigoTratamiento = Integer.parseInt(codigoTratamientoTextField.getText());
-        double costo = Double.parseDouble(costoTextField.getText());
+        String costoText = costoTextField.getText();
         String estado = estadoComboBox.getValue();
         int codigoPaciente = Integer.parseInt(codigoPacienteTextField.getText());
 
         Connection conn = null;
+
+        // Validación de nombres y apellidos
+        if (!nombres.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$") || !apellidos.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$")) {
+            mostrarAlerta("Error", "Los nombres y apellidos solo deben contener letras.");
+            return;
+        }
+        // Validación del campo motivo
+        if (!motivo.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ0 .,]+$")) {
+            mostrarAlerta("Error", "Insertar motivo sin datos numerícos");
+            return;
+        }
+        // Validación del campo costo
+        if (!costoTextField.getText().matches("^\\d+(\\.\\d+)?$")) {
+            mostrarAlerta("Error", "El campo de costo debe contener solo números.");
+            return;
+        }
+        // Obtén la fecha actual
+        LocalDate fechaActual = LocalDate.now();
+
+// Asigna la fecha actual como la fecha mínima del DatePicker
+        fechaConsultaDatePicker.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(date.isBefore(fechaActual));
+            }
+        });
+
+        double costo = Double.parseDouble(costoText);
+
+
         try {
             conn = Conexion.getConnection();
             String sql = "INSERT INTO tablaDeCitas (nombresPaciente, apellidosPaciente, motivoConsulta, codigoTratamiento, costo, estado, codigoPaciente) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -126,7 +159,7 @@ public class citasController {
             }
         }
 
-        limpiarCampos();
+        limpiarCampos1();
     }
 
 
@@ -139,7 +172,8 @@ public class citasController {
         alert.showAndWait();
     }
 
-    private void limpiarCampos() {
+    private void limpiarCampos1() {
+        codigoCitaTextField.clear();
         nombresTextField.clear();
         apellidosTextField.clear();
         motivoTextField.clear();
@@ -268,7 +302,7 @@ public class citasController {
 
                 if (filasAfectadas > 0) {
                     mostrarAlerta("Cita Actualizada", "La cita se ha actualizado con éxito.");
-                    limpiarCampos();
+                    limpiarCampos1();
                 } else {
                     mostrarAlerta("Error al Actualizar", "Hubo un error al actualizar la cita.");
                 }
@@ -337,7 +371,7 @@ public class citasController {
 
                 if (filasAfectadas > 0) {
                     mostrarAlerta("Cita Eliminada", "La cita se ha eliminado con éxito.");
-                    limpiarCampos();
+                    limpiarCampos1();
                 } else {
                     mostrarAlerta("Error al Eliminar", "Hubo un error al eliminar la cita.");
                 }

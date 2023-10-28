@@ -32,7 +32,8 @@ public class pacienteControler {
     @FXML
     private DatePicker fechaNacimientoDatePicker;
     @FXML
-    private SplitMenuButton generoSplitMenuButton;
+    private ComboBox<String> generoComboBox;
+
     @FXML
     private TextField telefonoTextField;
     @FXML
@@ -64,12 +65,15 @@ public class pacienteControler {
     private ObservableList<Paciente> pacientes = FXCollections.observableArrayList();
 
 
+
+
+
     @FXML
     private void guardarPaciente(ActionEvent event) throws SQLException {
         String nombres = nombresTextField.getText();
         String apellidos = apellidosTextField.getText();
         LocalDate fechaNacimiento = fechaNacimientoDatePicker.getValue();
-        String genero = generoSplitMenuButton.getText();
+        String genero = generoComboBox.getValue();
         String telefono = telefonoTextField.getText();
         String dui = duiTextField.getText();
 
@@ -158,7 +162,7 @@ public class pacienteControler {
             String nuevosNombres = nombresTextField.getText();
             String nuevosApellidos = apellidosTextField.getText();
             LocalDate nuevaFechaNacimiento = fechaNacimientoDatePicker.getValue();
-            String nuevoGenero = generoSplitMenuButton.getText();
+            String nuevoGenero = generoComboBox.getValue();
             String nuevoTelefono = telefonoTextField.getText();
             String nuevoDUI = duiTextField.getText();
 
@@ -229,7 +233,7 @@ public class pacienteControler {
         nombresTextField.clear();
         apellidosTextField.clear();
         fechaNacimientoDatePicker.setValue(null);
-        generoSplitMenuButton.setText("");
+        generoComboBox.setValue("");
         telefonoTextField.clear();
         duiTextField.clear();
     }

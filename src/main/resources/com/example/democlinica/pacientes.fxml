@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.SplitMenuButton?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -13,7 +14,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democlinica.pacienteControler">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democlinica.pacienteControler">
 
     <Pane layoutY="71.0" prefHeight="511.0" prefWidth="183.0" style="-fx-background-color: rgb(60, 68, 87);">
         <cursor>
@@ -147,11 +148,13 @@
       </font>
    </Label>
    <TextField fx:id="telefonoTextField" layoutX="784.0" layoutY="198.0" prefHeight="26.0" prefWidth="106.0" />
-   <SplitMenuButton fx:id="generoSplitMenuButton" accessibleText="Masculino" layoutX="318.0" layoutY="199.0" mnemonicParsing="false" text="seleccione">
-     <items>
-       <MenuItem mnemonicParsing="false" text="Masculino" />
-       <MenuItem mnemonicParsing="false" text="Femenino" />
-     </items>
-   </SplitMenuButton>
+    <ComboBox fx:id="generoComboBox" layoutX="318.0" layoutY="199.0" prefWidth="150.0" promptText="Seleccione">
+        <items>
+            <FXCollections fx:factory="observableArrayList">
+                <String fx:value="Masculino" />
+                <String fx:value="Femenino" />
+            </FXCollections>
+        </items>
+    </ComboBox>
 
 </AnchorPane>
