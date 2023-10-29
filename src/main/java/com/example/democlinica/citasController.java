@@ -43,6 +43,8 @@ public class citasController {
     @FXML
     private TextField costoTextField;
     @FXML
+    private ComboBox<String> horaComboBox;
+    @FXML
     private ComboBox<String> estadoComboBox;
     @FXML
     private TextField codigoPacienteTextField;
@@ -63,7 +65,7 @@ public class citasController {
     @FXML
     private TableColumn<Cita, LocalDate> fechaColumn;
     @FXML
-    private TableColumn<Cita, LocalDate> horaColumn;
+    private TableColumn<Cita, String> horaColumn;
     @FXML
     private TableColumn<Cita, String> estadoColumn;
     @FXML
@@ -89,6 +91,7 @@ public class citasController {
         String motivo = motivoTextField.getText();
         int codigoTratamiento = Integer.parseInt(codigoTratamientoTextField.getText());
         String costoText = costoTextField.getText();
+        String horaCita = horaComboBox.getValue();
         String estado = estadoComboBox.getValue();
         int codigoPaciente = Integer.parseInt(codigoPacienteTextField.getText());
 
@@ -126,15 +129,16 @@ public class citasController {
 
         try {
             conn = Conexion.getConnection();
-            String sql = "INSERT INTO tablaDeCitas (nombresPaciente, apellidosPaciente, motivoConsulta, codigoTratamiento, costo, estado, codigoPaciente) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO tablaDeCitas (nombresPaciente, apellidosPaciente, motivoConsulta, codigoTratamiento, costo, horaCita, estado, codigoPaciente) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, nombres);
             pstmt.setString(2, apellidos);
             pstmt.setString(3, motivo);
             pstmt.setInt(4, codigoTratamiento);
             pstmt.setDouble(5, costo);
-            pstmt.setString(6, estado);
-            pstmt.setInt(7, codigoPaciente);
+            pstmt.setString(6, horaCita);
+            pstmt.setString(7, estado);
+            pstmt.setInt(8, codigoPaciente);
 
             int filasAfectadas = pstmt.executeUpdate();
 
@@ -179,6 +183,7 @@ public class citasController {
         motivoTextField.clear();
         codigoTratamientoTextField.clear();
         costoTextField.clear();
+        horaComboBox.getSelectionModel().clearSelection();
         estadoComboBox.getSelectionModel().clearSelection();
         codigoPacienteTextField.clear();
     }
@@ -193,6 +198,7 @@ public class citasController {
         codigoTratamientoColumn.setCellValueFactory(new PropertyValueFactory<>("codigoTratamiento"));
         costoColumn.setCellValueFactory(new PropertyValueFactory<>("costo"));
         fechaColumn.setCellValueFactory(new PropertyValueFactory<>("fecha"));
+        horaColumn.setCellValueFactory(new PropertyValueFactory<>("horaCita"));
         estadoColumn.setCellValueFactory(new PropertyValueFactory<>("estado"));
         codigoPacienteColumn.setCellValueFactory(new PropertyValueFactory<>("codigoPaciente"));
         codigoCitaTextField = new TextField();
@@ -253,11 +259,12 @@ public class citasController {
         String motivo = motivoTextField.getText();
         String codigoTratamientoText = codigoTratamientoTextField.getText();
         String costoText = costoTextField.getText();
+        String horaCita = horaComboBox.getValue();
         String estado = estadoComboBox.getValue();
         String codigoPacienteText = codigoPacienteTextField.getText();
 
         if (codigoCitaText.isEmpty() || nombres.isEmpty() || apellidos.isEmpty() || motivo.isEmpty() ||
-                codigoTratamientoText.isEmpty() || costoText.isEmpty() || estado == null || codigoPacienteText.isEmpty()) {
+                codigoTratamientoText.isEmpty() || costoText.isEmpty() || horaCita == null || estado == null || codigoPacienteText.isEmpty()) {
             mostrarAlerta("Campos Incompletos", "Por favor, complete todos los campos obligatorios.");
             return;
         }
@@ -286,7 +293,7 @@ public class citasController {
         // Crear una conexión a la base de datos y realizar la actualización
         try (Connection connection = Conexion.getConnection()) {
             String sql = "UPDATE tablaDeCitas SET nombresPaciente = ?, apellidosPaciente = ?, motivoConsulta = ?, " +
-                    "codigoTratamiento = ?, costo = ?, estado = ?, codigoPaciente = ? WHERE codigoCita = ?";
+                    "codigoTratamiento = ?, costo = ?, horaCita = ?, estado = ?, codigoPaciente = ? WHERE codigoCita = ?";
 
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, nombres);
@@ -294,9 +301,10 @@ public class citasController {
                 statement.setString(3, motivo);
                 statement.setInt(4, codigoTratamiento);
                 statement.setDouble(5, costo);
-                statement.setString(6, estado);
-                statement.setInt(7, codigoPaciente);
-                statement.setInt(8, codigoCita);
+                statement.setString(6, horaCita);
+                statement.setString(7, estado);
+                statement.setInt(8, codigoPaciente);
+                statement.setInt(9, codigoCita);
 
                 int filasAfectadas = statement.executeUpdate();
 
@@ -401,12 +409,13 @@ public class citasController {
                     fecha = timestamp.toLocalDateTime();
                 }
 
+                String horaCita= rs.getString("horaCita");
                 String estado = rs.getString("estado");
                 int codigoPaciente = rs.getInt("codigoPaciente");
                 int codigoSucursal = rs.getInt("codigoSucursal");
 
                 // Crea un objeto de cita y agrégalo a la lista
-                Cita cita = new Cita(codigoCita, nombresPaciente, apellidosPaciente, motivoConsulta, codigoTratamiento, costo, fecha, estado, codigoPaciente, codigoSucursal);
+                Cita cita = new Cita(codigoCita, nombresPaciente, apellidosPaciente, motivoConsulta, codigoTratamiento, costo, fecha, horaCita, estado, codigoPaciente, codigoSucursal);
                 citas.add(cita);
             }
             rs.close();
@@ -430,6 +439,7 @@ public class citasController {
                         "codigoTratamiento = ?, " +
                         "costo = ?, " +
                         "fecha = ?, " +
+                        "horaCita = ?, " +
                         "estado = ?, " +
                         "codigoPaciente = ? " +
                         "WHERE codigoCita = ?";
@@ -448,9 +458,10 @@ public class citasController {
                     pstmt.setNull(6, Types.TIMESTAMP);
                 }
 
-                pstmt.setString(7, cita.getEstado());
-                pstmt.setInt(8, cita.getCodigoPaciente());
-                pstmt.setInt(9, cita.getCodigoCita());
+                pstmt.setString(7, cita.getHoraCita());
+                pstmt.setString(8, cita.getEstado());
+                pstmt.setInt(9, cita.getCodigoPaciente());
+                pstmt.setInt(10, cita.getCodigoCita());
 
                 int rowsUpdated = pstmt.executeUpdate();
 

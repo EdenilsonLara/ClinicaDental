@@ -119,18 +119,19 @@
     <TextField fx:id="motivoTextField" layoutX="336.0" layoutY="199.0" prefHeight="25.0" prefWidth="273.0" />
     <TextField fx:id="costoTextField" layoutX="775.0" layoutY="86.0" prefHeight="25.0" prefWidth="74.0" />
     <DatePicker fx:id="fechaConsultaDatePicker" editable="false" layoutX="774.0" layoutY="138.0" />
-    <TableView fx:id="citasTableView" layoutX="188.0" layoutY="316.0" prefHeight="196.0" prefWidth="771.0">
+    <TableView fx:id="citasTableView" layoutX="183.0" layoutY="327.0" prefHeight="196.0" prefWidth="838.0">
         <columns>
-            <TableColumn fx:id="codigoCitaColumn" prefWidth="56.0" text="CodigoCita" />
-            <TableColumn fx:id="nombresPacienteColumn" prefWidth="82.0" text="Nombres" />
-            <TableColumn fx:id="apellidosPacienteColumn" prefWidth="97.0" text="Apellidos" />
-            <TableColumn fx:id="motivoConsultaColumn" prefWidth="98.0" text="Motivo" />
-            <TableColumn fx:id="codigoTratamientoColumn" prefWidth="91.0" text="CodigoTratamiento" />
-            <TableColumn fx:id="costoColumn" prefWidth="91.0" text="Costo" />
-            <TableColumn fx:id="fechaColumn" prefWidth="99.0" text="Fecha" />
-            <TableColumn fx:id="horaColumn" prefWidth="99.0" text="Hora" />
-         <TableColumn fx:id="estadoColumn" minWidth="0.0" prefWidth="79.0" text="Estado" />
-         <TableColumn fx:id="codigoPacienteColumn" prefWidth="85.0" text="CodigoPaciente" />
+            <TableColumn fx:id="codigoCitaColumn" prefWidth="40.0" text="CodigoCita" />
+            <TableColumn fx:id="nombresPacienteColumn" prefWidth="83.0" text="Nombres" />
+            <TableColumn fx:id="apellidosPacienteColumn" prefWidth="89.0" text="Apellidos" />
+            <TableColumn fx:id="motivoConsultaColumn" prefWidth="85.0" text="Motivo" />
+            <TableColumn fx:id="codigoTratamientoColumn" prefWidth="50.0" text="CodigoTratamiento" />
+            <TableColumn fx:id="costoColumn" prefWidth="114.0" text="Costo" />
+            <TableColumn fx:id="fechaColumn" prefWidth="115.0" text="Fecha" />
+            <TableColumn fx:id="horaColumn" minWidth="0.0" prefWidth="95.0" text="Hora" />
+            <TableColumn fx:id="estadoColumn" minWidth="0.0" prefWidth="76.0" text="estado" />
+
+            <TableColumn fx:id="codigoPacienteColumn" prefWidth="88.0" text="CodigoPaciente" />
         </columns>
     </TableView>
     <Button layoutX="444.0" layoutY="528.0" mnemonicParsing="false" onAction="#eliminarCita" text="Eliminar">
@@ -138,7 +139,7 @@
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Button>
-    <Button layoutX="592.0" layoutY="528.0" mnemonicParsing="false" text="Actualizar">
+    <Button layoutX="592.0" layoutY="528.0" mnemonicParsing="false" onAction="#editarCita" text="Actualizar">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>
@@ -173,7 +174,7 @@
          <Font name="Arial Bold" size="14.0" />
       </font>
    </Label>
-   <ComboBox fx:id="horaComboBox" layoutX="775.0" layoutY="180.0" prefWidth="150.0" promptText="Seleccione" >
+   <ComboBox fx:id="horaComboBox" layoutX="775.0" layoutY="180.0" prefWidth="150.0" promptText="Seleccione">
     <items>
         <FXCollections fx:factory="observableArrayList">
             <String fx:value="8:00 AM - 9:00 AM" />

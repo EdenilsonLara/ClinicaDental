@@ -33,7 +33,6 @@ public class pacienteControler {
     private DatePicker fechaNacimientoDatePicker;
     @FXML
     private ComboBox<String> generoComboBox;
-
     @FXML
     private TextField telefonoTextField;
     @FXML
@@ -70,6 +69,8 @@ public class pacienteControler {
 
     @FXML
     private void guardarPaciente(ActionEvent event) throws SQLException {
+
+
         String nombres = nombresTextField.getText();
         String apellidos = apellidosTextField.getText();
         LocalDate fechaNacimiento = fechaNacimientoDatePicker.getValue();
@@ -78,6 +79,12 @@ public class pacienteControler {
         String dui = duiTextField.getText();
 
         Connection conn = null;
+
+        // Validación de nombres y apellidos
+        if (!nombres.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$") || !apellidos.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$")) {
+            mostrarAlerta("Error", "Los nombres y apellidos solo deben contener letras.");
+            return;
+        }
         try {
             conn = Conexion.getConnection();
             String sql = "INSERT INTO tablaDePacientes (nombresPaciente, apellidosPaciente, fechaNacimiento, genero, telefono, dui) VALUES (?, ?, ?, ?, ?, ?)";

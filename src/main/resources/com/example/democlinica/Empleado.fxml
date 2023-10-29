@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democlinica.EmpleadoController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democlinica.EmpleadoController">
 
     <Pane layoutY="71.0" prefHeight="511.0" prefWidth="183.0" style="-fx-background-color: rgb(60, 68, 87);">
         <cursor>
@@ -115,8 +115,8 @@
             <TableColumn fx:id="apellidosColumn" prefWidth="116.0" text="Apellidos" />
             <TableColumn fx:id="fechaNacimientoColumn" prefWidth="116.0" text="Fecha" />
             <TableColumn fx:id="generoColumn" prefWidth="125.0" text="Genero" />
-            <TableColumn fx:id="duiColumn" prefWidth="103.0" text="Dui" />
-            <TableColumn fx:id="telefonoColumn" prefWidth="117.0" text="Telefono" />
+            <TableColumn fx:id="duiColumn" prefWidth="103.0" text="Telefono" />
+            <TableColumn fx:id="telefonoColumn" prefWidth="117.0" text="Dui" />
         </columns>
     </TableView>
     <Button layoutX="444.0" layoutY="528.0" mnemonicParsing="false" onAction="#eliminarEmpleado" text="Eliminar">
@@ -146,12 +146,12 @@
       </font>
    </Label>
    <TextField fx:id="apellidosTextField" layoutX="370.0" layoutY="159.0" prefHeight="26.0" prefWidth="274.0" />
-   <SplitMenuButton fx:id="generoSplitMenuButton" layoutX="786.0" layoutY="107.0" mnemonicParsing="false" text="SplitMenuButton">
+   <SplitMenuButton fx:id="generoSplitMenuButton" layoutX="786.0" layoutY="107.0" mnemonicParsing="false" text="Seleccione">
      <items>
-       <MenuItem mnemonicParsing="false" text="Action 1" />
-       <MenuItem mnemonicParsing="false" text="Action 2" />
+       <MenuItem mnemonicParsing="false" text="Masculino" />
+       <MenuItem mnemonicParsing="false" text="Femenino" />
      </items>
    </SplitMenuButton>
-   <DatePicker fx:id="fechaNacimientoDatePicker" layoutX="370.0" layoutY="214.0" />
+   <DatePicker fx:id="fechaNacimientoDatePicker" editable="false" layoutX="370.0" layoutY="214.0" />
 
 </AnchorPane>

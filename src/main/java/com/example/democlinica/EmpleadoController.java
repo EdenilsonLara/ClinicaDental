@@ -71,6 +71,15 @@ public class EmpleadoController {
             mostrarAlerta("Error", "Los nombres y apellidos solo deben contener letras.");
             return;
         }
+        // Validación de DUI
+
+            if (!duiTextField.getText().matches("^[0-9]+(-[0-9])?$")) {
+                mostrarAlerta("Error", "El DUI debe tener el formato 12345678-9 y solo se permiten números y un guion.");
+                return;
+            }
+
+
+
         try (Connection connection = Conexion.getConnection();
              PreparedStatement stmt = connection.prepareStatement(
                      "INSERT INTO tablaDeEmpleados (nombresEmpleado, apellidosEmpleado, fechaNacimiento, genero, dui, telefono, codigoSucursal) VALUES (?, ?, ?, ?, ?, ?, ?)")) {

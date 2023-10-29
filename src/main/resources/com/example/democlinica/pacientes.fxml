@@ -114,7 +114,7 @@
     </Button>
     <TextField fx:id="nombresTextField" layoutX="318.0" layoutY="97.0" prefHeight="26.0" prefWidth="273.0" />
     <TextField fx:id="apellidosTextField" layoutX="318.0" layoutY="150.0" prefHeight="25.0" prefWidth="273.0" />
-    <DatePicker fx:id="fechaNacimientoDatePicker" layoutX="782.0" layoutY="97.0" />
+    <DatePicker fx:id="fechaNacimientoDatePicker" editable="false" layoutX="782.0" layoutY="97.0" />
     <TableView fx:id="pacientesTableView" layoutX="192.0" layoutY="309.0" prefHeight="200.0" prefWidth="766.0">
         <columns>
             <TableColumn fx:id="codigoPacienteColumn" prefWidth="82.20001220703125" text="CodigoPaciente" />
