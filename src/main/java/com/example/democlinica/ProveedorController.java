@@ -2,6 +2,8 @@ package com.example.democlinica;
 
 import com.example.democlinica.BaseDatos.Conexion;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -61,6 +63,21 @@ public class ProveedorController {
             mostrarAlerta("Campos Incompletos", "Por favor, complete todos los campos.");
             return;
         }
+        // Validación de nombres y nombre de contacto
+        if (!nombresProveedor.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$")) {
+            mostrarAlerta("Error", "El nombre del proveedor solo debe contener letras.");
+            return;
+        }
+
+        if (!nombreContactoProveedor.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$")) {
+            mostrarAlerta("Error", "El nombre de contacto solo debe contener letras.");
+            return;
+        }
+        // Validación del campo de teléfono
+        if (!telefonoProveedor.matches("^[0-9 -]+$")) {
+            mostrarAlerta("Error", "El campo de teléfono debe contener solo números.");
+            return;
+        }
 
         try (Connection conn = Conexion.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(
@@ -87,6 +104,17 @@ public class ProveedorController {
 
     @FXML
     private void initialize() {
+        // Agregar un listener para el campo de teléfono
+        telefonoProveedorTextField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (newValue.length() == 4 && !newValue.contains("-")) {
+                    telefonoProveedorTextField.setText(newValue + "-");
+                } else if (newValue.length() > 9) {
+                    telefonoProveedorTextField.setText(oldValue); // Restaurar el valor anterior si se superan 8 dígitos
+                }
+            }
+        });
         // Configura las columnas para mostrar los datos
         codigoProveedorColumn.setCellValueFactory(new PropertyValueFactory<>("codigoProveedor"));
         nombresProveedorColumn.setCellValueFactory(new PropertyValueFactory<>("nombresProveedor"));

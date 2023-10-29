@@ -77,6 +77,7 @@ public class citasController {
 
 
 
+
     private ObservableList<Cita> citas = FXCollections.observableArrayList();
 
 
@@ -91,11 +92,23 @@ public class citasController {
         String motivo = motivoTextField.getText();
         int codigoTratamiento = Integer.parseInt(codigoTratamientoTextField.getText());
         String costoText = costoTextField.getText();
+        LocalDate fechaSeleccionada = fechaConsultaDatePicker.getValue();
         String horaCita = horaComboBox.getValue();
         String estado = estadoComboBox.getValue();
         int codigoPaciente = Integer.parseInt(codigoPacienteTextField.getText());
 
         Connection conn = null;
+
+        // Validación de campos vacíos
+        if (nombres.isEmpty() || apellidos.isEmpty() || motivo.isEmpty() || costoText.isEmpty() ||
+                horaCita == null || estado == null ){
+            mostrarAlerta("Error", "Todos los campos son obligatorios.");
+            return;
+        }
+        if (fechaSeleccionada == null) {
+            mostrarAlerta("Error", "Por favor, seleccione una fecha de consulta.");
+            return;
+        }
 
         // Validación de nombres y apellidos
         if (!nombres.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$") || !apellidos.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$")) {
@@ -129,16 +142,18 @@ public class citasController {
 
         try {
             conn = Conexion.getConnection();
-            String sql = "INSERT INTO tablaDeCitas (nombresPaciente, apellidosPaciente, motivoConsulta, codigoTratamiento, costo, horaCita, estado, codigoPaciente) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO tablaDeCitas (nombresPaciente, apellidosPaciente, motivoConsulta, codigoTratamiento, costo, fecha, horaCita, estado, codigoPaciente) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, nombres);
             pstmt.setString(2, apellidos);
             pstmt.setString(3, motivo);
             pstmt.setInt(4, codigoTratamiento);
             pstmt.setDouble(5, costo);
-            pstmt.setString(6, horaCita);
-            pstmt.setString(7, estado);
-            pstmt.setInt(8, codigoPaciente);
+            LocalDateTime fechaCita = fechaSeleccionada.atStartOfDay();
+            pstmt.setTimestamp(6, Timestamp.valueOf(fechaCita));
+            pstmt.setString(7, horaCita);
+            pstmt.setString(8, estado);
+            pstmt.setInt(9, codigoPaciente);
 
             int filasAfectadas = pstmt.executeUpdate();
 
@@ -182,11 +197,13 @@ public class citasController {
         apellidosTextField.clear();
         motivoTextField.clear();
         codigoTratamientoTextField.clear();
+
         costoTextField.clear();
         horaComboBox.getSelectionModel().clearSelection();
         estadoComboBox.getSelectionModel().clearSelection();
         codigoPacienteTextField.clear();
     }
+
 
     @FXML
     private void initialize() {
@@ -246,9 +263,8 @@ public class citasController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
     }
+
 
 
     @FXML

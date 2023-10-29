@@ -2,6 +2,8 @@ package com.example.democlinica;
 
 import com.example.democlinica.BaseDatos.Conexion;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -80,11 +82,31 @@ public class pacienteControler {
 
         Connection conn = null;
 
+        // Validación de campos vacíos
+        if (nombres.isEmpty() || apellidos.isEmpty() || fechaNacimiento == null || genero == null || telefono.isEmpty() || dui.isEmpty()) {
+            mostrarAlerta("Error", "Todos los campos son obligatorios.");
+            return;
+        }
+
         // Validación de nombres y apellidos
         if (!nombres.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$") || !apellidos.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$")) {
             mostrarAlerta("Error", "Los nombres y apellidos solo deben contener letras.");
             return;
         }
+        // Validación del campo de DUI
+        if (!dui.matches("^[0-9 -]+$")) {
+            mostrarAlerta("Error", "El campo de Dui debe contener solo números.");
+            return;
+        }
+        // Validación del campo de teléfono
+        if (!telefono.matches("^[0-9 -]+$")) {
+            mostrarAlerta("Error", "El campo de teléfono debe contener solo números.");
+            return;
+        }
+
+
+
+
         try {
             conn = Conexion.getConnection();
             String sql = "INSERT INTO tablaDePacientes (nombresPaciente, apellidosPaciente, fechaNacimiento, genero, telefono, dui) VALUES (?, ?, ?, ?, ?, ?)";
@@ -124,6 +146,29 @@ public class pacienteControler {
 
     @FXML
     private void initialize() {
+        // Agregar un listener para el campo de teléfono
+        telefonoTextField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (newValue.length() == 4 && !newValue.contains("-")) {
+                    telefonoTextField.setText(newValue + "-");
+                } else if (newValue.length() > 9) {
+                    telefonoTextField.setText(oldValue); // Restaurar el valor anterior si se superan 8 dígitos
+                }
+            }
+        });
+
+
+        duiTextField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (newValue.length() == 8 && !newValue.contains("-")) {
+                    duiTextField.setText(newValue + "-");
+                } else if (newValue.length() > 10) {
+                    duiTextField.setText(oldValue); // Restaurar el valor anterior si se superan 11 dígitos
+                }
+            }
+        });
         // Configura las columnas para mostrar los datos
         codigoPacienteColumn.setCellValueFactory(new PropertyValueFactory<>("codigoPaciente"));
         nombresPacienteColumn.setCellValueFactory(new PropertyValueFactory<>("nombresPaciente"));

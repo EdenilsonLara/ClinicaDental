@@ -69,9 +69,9 @@ public class LoginController {
 
             } else {
                 if (!enteredUsername.equals("usuario")) {
-                    wrongLogin2.setText("Usuario Incorrecto");
+                    wrongLogin2.setText("Datos Incorrectos");
                 } else {
-                    wrongLogin2.setText("Contraseña Incorrecta");
+                    wrongLogin2.setText("Datos Incorrects");
                 }
             }
         }

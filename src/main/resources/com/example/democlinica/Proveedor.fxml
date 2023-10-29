@@ -103,8 +103,8 @@
         <columns>
             <TableColumn fx:id="codigoProveedorColumn" prefWidth="82.20001220703125" text="CodigoProveedor" />
             <TableColumn fx:id="nombresProveedorColumn" prefWidth="125.0" text="Nombre " />
-            <TableColumn fx:id="telefonoProveedorColumn" prefWidth="122.0" text="Telefono" />
-            <TableColumn fx:id="direccionProveedorColumn" prefWidth="142.0" text="Direccion" />
+            <TableColumn fx:id="telefonoProveedorColumn" prefWidth="122.0" text="Dirección" />
+            <TableColumn fx:id="direccionProveedorColumn" prefWidth="142.0" text="Teléfono" />
             <TableColumn fx:id="nombreContactoProveedorColumn" prefWidth="291.0" text="Nombre Contacto" />
         </columns>
     </TableView>

@@ -9,8 +9,8 @@ public class Cita {
     private String motivoConsulta;
     private int codigoTratamiento;
     private double costo;
-    private LocalDateTime fecha; // Usamos LocalDateTime en lugar de null para la fecha
-    private String horaCita; // Campo para la hora
+    private LocalDateTime fecha; // Nuevo campo de fecha
+    private String horaCita;
     private String estado;
     private int codigoPaciente;
     private int codigoSucursal;
@@ -24,13 +24,12 @@ public class Cita {
         this.motivoConsulta = motivoConsulta;
         this.codigoTratamiento = codigoTratamiento;
         this.costo = costo;
-        this.fecha = fecha;
+        this.fecha = fecha; // Inicializa el campo de fecha
         this.horaCita = horaCita;
         this.estado = estado;
         this.codigoPaciente = codigoPaciente;
         this.codigoSucursal = codigoSucursal;
     }
-
 
     public int getCodigoCita() {
         return codigoCita;
@@ -87,6 +86,7 @@ public class Cita {
     public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
+
     public String getHoraCita() {
         return horaCita;
     }
@@ -118,21 +118,5 @@ public class Cita {
     public void setCodigoSucursal(int codigoSucursal) {
         this.codigoSucursal = codigoSucursal;
     }
-
-    @Override
-    public String toString() {
-        return "Cita{" +
-                "codigoCita=" + codigoCita +
-                ", nombresPaciente='" + nombresPaciente + '\'' +
-                ", apellidosPaciente='" + apellidosPaciente + '\'' +
-                ", motivoConsulta='" + motivoConsulta + '\'' +
-                ", codigoTratamiento=" + codigoTratamiento +
-                ", costo=" + costo +
-                ", fecha=" + fecha +
-                ", horaCita=" + horaCita +
-                ", estado='" + estado + '\'' +
-                ", codigoPaciente=" + codigoPaciente +
-                ", codigoSucursal=" + codigoSucursal +
-                '}';
-    }
 }
+

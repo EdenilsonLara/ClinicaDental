@@ -67,6 +67,17 @@ public class inventarioController {
 
 
         Connection conn = null;
+        /* Validación de campos vacíos
+        if (nombreEquipo.isEmpty() || descripcion.isEmpty() ) {
+            mostrarAlerta("Error", "Todos los campos son obligatorios.");
+            return;
+        }*/
+
+         // Validación de nombres y descripción
+        if (!nombreEquipo.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$")) {
+            mostrarAlerta("Error", "El nombre del equipo solo debe contener letras.");
+            return;
+        }
 
         try {
             conn = Conexion.getConnection();

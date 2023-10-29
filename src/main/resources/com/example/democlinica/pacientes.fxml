@@ -131,11 +131,6 @@
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Button>
-    <Button layoutX="592.0" layoutY="528.0" mnemonicParsing="false" onAction="#editarPaciente" text="Actualizar">
-        <font>
-            <Font name="Arial Bold" size="14.0" />
-        </font>
-    </Button>
    <Label layoutX="730.0" layoutY="143.0" prefHeight="39.0" prefWidth="70.0" text="Dui:">
       <font>
          <Font name="Arial Bold" size="14.0" />
