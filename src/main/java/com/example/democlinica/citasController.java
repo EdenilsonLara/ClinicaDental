@@ -263,6 +263,23 @@ public class citasController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        estadoColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        estadoColumn.setOnEditCommit(event -> {
+            Cita cita = event.getRowValue();
+            cita.setEstado(event.getNewValue());
+            try {
+                actualizarCitaEnBaseDeDatos(cita);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        estadoColumn.setOnEditCancel(event -> {
+
+        });
+
+        estadoColumn.setEditable(true);
     }
 
 
