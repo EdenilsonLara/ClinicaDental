@@ -1,5 +1,6 @@
 package com.example.democlinica;
 
+import com.example.democlinica.BaseDatos.Conexion;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,49 +11,101 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
-
+import com.itextpdf.layout.Document;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
-import javafx.event.ActionEvent;
+
+import java.io.File;
 import java.io.IOException;
-import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Optional;
 
 public class ReportesController {
+    private int contadorReporte = 1; // Inicializamos el contador de reporte
+
     @FXML
     private void generarReportePDF(ActionEvent event) {
         // Ruta donde deseas guardar el archivo PDF
-        String rutaArchivoPDF = "C:/Users/manue/";
+        String rutaDirectorioPDF = "C:\\Users\\DELL\\Desktop\\pdf\\";
+        String nombreArchivoPDF;
 
+        Connection connection = null;
 
         try {
-            PdfWriter pdfWriter = new PdfWriter(rutaArchivoPDF);
+            connection = Conexion.getConnection();
+            File pdfFile;
+
+            do {
+                nombreArchivoPDF = "cita" + contadorReporte + ".pdf";
+                pdfFile = new File(rutaDirectorioPDF + nombreArchivoPDF);
+                contadorReporte++;
+            } while (pdfFile.exists()); // Comprobar si el archivo ya existe
+
+            PdfWriter pdfWriter = new PdfWriter(pdfFile);
             PdfDocument pdfDocument = new PdfDocument(pdfWriter);
             Document document = new Document(pdfDocument);
+            String sql = "SELECT codigoCita, apellidosPaciente, codigoPaciente, codigoSucursal, estado FROM Tabladecitas";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
 
-            // Contenido del informe PDF (puedes personalizarlo)
-            String contenido = "Este es un informe PDF generado desde JavaFX.";
+            while (resultSet.next()) {
+                String codigoCita = resultSet.getString("codigoCita");
+                String apellidoPaciente = resultSet.getString("apellidosPaciente");
+                String codigoPaciente = resultSet.getString("codigoPaciente");
+                String codigoSucursal = resultSet.getString("codigoSucursal");
+                String estado = resultSet.getString("estado");
 
-            // Agregar contenido al PDF
-            Paragraph paragraph = new Paragraph(contenido);
-            document.add(paragraph);
-
-            // Cerrar el documento
+                document.add(new Paragraph("Codigo de la cita: " + codigoCita));
+                document.add(new Paragraph("Apellidos del paciente: " + apellidoPaciente));
+                document.add(new Paragraph("Codigo del paciente: " + codigoPaciente));
+                document.add(new Paragraph("Codigo de la surcusal: " + codigoSucursal));
+                document.add(new Paragraph("Estado: " + estado));
+                document.add(new Paragraph("-------------------------------------------------------"));
+            }
+            resultSet.close();
+            statement.close();
             document.close();
-
-            // Mostrar un mensaje de éxito (puedes personalizarlo)
-            mostrarMensaje("Informe PDF generado con éxito.");
         } catch (IOException e) {
             e.printStackTrace();
             mostrarMensaje("Error al generar el informe PDF.");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
+
+    // Resto del código de la clase...
+
+
+
+
+// Resto del código de la clase...
+
+
+
+
+
     private void mostrarMensaje(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Información");
+        alert.setHeaderText(null);
+        alert.setContentText("el reporte a sido creado exitosamente.");
+        alert.showAndWait();
         // Implementa un cuadro de diálogo o notificación para mostrar el mensaje.
         // Puedes utilizar Alert u otro componente según tus preferencias.
     }
+
 
     @FXML
     private void irATratamientos(ActionEvent event) throws IOException {
