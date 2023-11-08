@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democlinica.ReportesController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democlinica.ReportesController">
 
     <Pane layoutY="71.0" prefHeight="511.0" prefWidth="183.0" style="-fx-background-color: rgb(60, 68, 87);">
         <cursor>
@@ -84,7 +82,7 @@
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Button>
-    <Button layoutX="398.0" layoutY="203.0" mnemonicParsing="false" text="Pacientes">
+    <Button layoutX="398.0" layoutY="203.0" mnemonicParsing="false" onAction="#generarPacientes" text="Pacientes">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>
@@ -99,12 +97,12 @@
          <Font name="Arial Bold" size="14.0" />
       </font>
    </Button>
-   <Button layoutX="728.0" layoutY="203.0" mnemonicParsing="false" text="Inventario">
+   <Button layoutX="728.0" layoutY="203.0" mnemonicParsing="false" onAction="#generarInventario" text="Inventario">
       <font>
          <Font name="Arial Bold" size="14.0" />
       </font>
    </Button>
-   <Button layoutX="559.0" layoutY="203.0" mnemonicParsing="false" text="Tratamiento">
+   <Button layoutX="559.0" layoutY="203.0" mnemonicParsing="false" onAction="#generarTratameintos" text="Tratamiento">
       <font>
          <Font name="Arial Bold" size="14.0" />
       </font>
