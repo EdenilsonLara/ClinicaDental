@@ -288,6 +288,142 @@ public class ReportesController {
 
 
 
+    private int contadorEmpleados= 1;
+
+
+    @FXML
+    private void generarEmpleados() {
+        generarEmpleados(null);
+    }
+
+    @FXML
+    private void generarEmpleados(ActionEvent event){
+        String rutaDirectorioPDF = "C:\\Users\\DELL\\Desktop\\pdf\\Empleados\\";
+        String nombreArchivoPDF;
+
+        Connection connection = null;
+
+        try {
+            connection = Conexion.getConnection();
+            File pdfFile;
+
+            do {
+                nombreArchivoPDF = "Empleados" + contadorEmpleados + ".pdf";
+                pdfFile = new File(rutaDirectorioPDF + nombreArchivoPDF);
+                contadorEmpleados++;
+            } while (pdfFile.exists()); // Comprobar si el archivo ya existe
+
+            PdfWriter pdfWriter = new PdfWriter(pdfFile);
+            PdfDocument pdfDocument = new PdfDocument(pdfWriter);
+            Document document = new Document(pdfDocument);
+            String sql = "SELECT nombresEmpleado,fechaNacimiento,genero,dui,telefono  FROM tablaDeEmpleados";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                String nombresEmpleado = resultSet.getString("nombresEmpleado");
+                String fechaNacimiento = resultSet.getString("fechaNacimiento");
+                String genero = resultSet.getString("genero");
+                String dui = resultSet.getString("dui");
+                String telefono = resultSet.getString("telefono");
+
+
+                document.add(new Paragraph("Nombre Del Empleado: " + nombresEmpleado ));
+                document.add(new Paragraph("Fecha Del Nacimiento: " + fechaNacimiento));
+                document.add(new Paragraph("Genero: " + genero));
+                document.add(new Paragraph("Dui: " + dui ));
+                document.add(new Paragraph("Telefono: " + telefono));
+                document.add(new Paragraph("-------------------------------------------------------"));
+            }
+
+            resultSet.close();
+            statement.close();
+            document.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarMensaje("Error al generar el informe PDF.");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
+    private int contadorProveedores= 1;
+
+
+    @FXML
+    private void generarProveedores() {
+        generarProveedores(null);
+    }
+
+    @FXML
+    private void generarProveedores(ActionEvent event){
+        String rutaDirectorioPDF = "C:\\Users\\DELL\\Desktop\\pdf\\Proveedores\\";
+        String nombreArchivoPDF;
+
+        Connection connection = null;
+
+        try {
+            connection = Conexion.getConnection();
+            File pdfFile;
+
+            do {
+                nombreArchivoPDF = "Proveedores" + contadorProveedores + ".pdf";
+                pdfFile = new File(rutaDirectorioPDF + nombreArchivoPDF);
+                contadorProveedores++;
+            } while (pdfFile.exists()); // Comprobar si el archivo ya existe
+
+            PdfWriter pdfWriter = new PdfWriter(pdfFile);
+            PdfDocument pdfDocument = new PdfDocument(pdfWriter);
+            Document document = new Document(pdfDocument);
+            String sql = "SELECT nombreEmpresa,telefono,direccion,nombreContacto,codigoSucursal  FROM tablaDeProveedores";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                String nombreEmpresa = resultSet.getString("nombreEmpresa");
+                String telefono = resultSet.getString("telefono");
+                String direccion = resultSet.getString("direccion");
+                String nombreContacto = resultSet.getString("nombreContacto");
+                String codigoSucursal = resultSet.getString("codigoSucursal");
+
+
+                document.add(new Paragraph("Nombre Del Empleado: " + nombreEmpresa ));
+                document.add(new Paragraph("Fecha Del Nacimiento: " + telefono));
+                document.add(new Paragraph("Genero: " + direccion));
+                document.add(new Paragraph("nombreContacto: " + nombreContacto ));
+                document.add(new Paragraph("Telefono: " + codigoSucursal));
+                document.add(new Paragraph("-------------------------------------------------------"));
+            }
+
+            resultSet.close();
+            statement.close();
+            document.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarMensaje("Error al generar el informe PDF.");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
 
     private void mostrarMensaje(String mensaje) {

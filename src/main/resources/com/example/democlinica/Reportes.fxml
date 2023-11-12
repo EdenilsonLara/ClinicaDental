@@ -87,12 +87,12 @@
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Button>
-   <Button layoutX="264.0" layoutY="291.0" mnemonicParsing="false" text="Empleados">
+   <Button layoutX="264.0" layoutY="291.0" mnemonicParsing="false" onAction="#generarEmpleados" text="Empleados">
       <font>
          <Font name="Arial Bold" size="14.0" />
       </font>
    </Button>
-   <Button layoutX="398.0" layoutY="291.0" mnemonicParsing="false" text="Proveedores">
+   <Button layoutX="398.0" layoutY="291.0" mnemonicParsing="false" onAction="#generarProveedores" text="Proveedores">
       <font>
          <Font name="Arial Bold" size="14.0" />
       </font>
