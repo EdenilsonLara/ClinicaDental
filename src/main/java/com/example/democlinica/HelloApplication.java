@@ -10,27 +10,30 @@ import java.io.IOException;
 
 public class HelloApplication extends Application {
 
-    private static Stage stg;
-
-    @Override
-    public void start(Stage primaryStage) throws Exception{
-        stg = primaryStage;
-
-        Parent root = FXMLLoader.load(getClass().getResource("hello-view.fxml"));
-        primaryStage.setScene(new Scene(root));
-        primaryStage.setResizable(false);
-        primaryStage.show();
-    }
+    private static Stage primaryStage;
 
     public static void main(String[] args) {
         launch(args);
     }
 
+    @Override
+    public void start(Stage primaryStage) {
+        HelloApplication.primaryStage = primaryStage;
+
+        try {
+            changeScene("hello-view.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        primaryStage.setResizable(true);
+        primaryStage.show();
+    }
 
     public static void changeScene(String fxmlFileName) throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(HelloApplication.class.getResource(fxmlFileName));
         Parent pane = loader.load();
-        stg.getScene().setRoot(pane);
+        primaryStage.setScene(new Scene(pane));
     }
 }

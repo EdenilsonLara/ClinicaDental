@@ -22,6 +22,10 @@ public class Inicio {
     @FXML
     private Button citasinicio;
 
+
+
+
+
     @FXML
     private void irACitas(ActionEvent event) throws IOException {
         // Cargar la vista de citas desde citas.fxml
