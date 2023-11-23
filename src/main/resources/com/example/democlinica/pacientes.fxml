@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democlinica.pacienteControler">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democlinica.pacienteControler">
 
     <Pane layoutY="71.0" prefHeight="511.0" prefWidth="183.0" style="-fx-background-color: rgb(60, 68, 87);">
         <cursor>
@@ -102,12 +102,7 @@
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Label>
-    <Button layoutX="445.0" layoutY="263.0" mnemonicParsing="false" onAction="#guardarPaciente" text="Guardar">
-        <font>
-            <Font name="Arial Bold" size="14.0" />
-        </font>
-    </Button>
-    <Button layoutX="600.0" layoutY="263.0" mnemonicParsing="false" text="Limpiar">
+    <Button layoutX="204.0" layoutY="528.0" mnemonicParsing="false" onAction="#guardarPaciente" text="Guardar">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>
@@ -126,7 +121,7 @@
          <TableColumn fx:id="duiColumn" prefWidth="130.0" text="Dui" />
         </columns>
     </TableView>
-    <Button layoutX="444.0" layoutY="528.0" mnemonicParsing="false" onAction="#eliminarPaciente" text="Eliminar">
+    <Button layoutX="318.0" layoutY="528.0" mnemonicParsing="false" onAction="#eliminarPaciente" text="Eliminar">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>

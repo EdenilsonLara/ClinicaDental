@@ -102,7 +102,7 @@
          <Font name="Arial Bold" size="14.0" />
       </font>
    </Button>
-   <Button layoutX="559.0" layoutY="203.0" mnemonicParsing="false" onAction="#generarTratameintos" text="Tratamiento">
+   <Button layoutX="559.0" layoutY="203.0" mnemonicParsing="false" onAction="#generarTratamientos" text="Tratamiento">
       <font>
          <Font name="Arial Bold" size="14.0" />
       </font>

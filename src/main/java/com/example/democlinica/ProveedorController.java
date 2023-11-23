@@ -136,6 +136,19 @@ public class ProveedorController {
             proveedor.setDireccionProveedor(event.getNewValue());
             actualizarProveedorEnBaseDeDatos(proveedor);
         });
+        telefonoProveedorColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        telefonoProveedorColumn.setOnEditCommit(event -> {
+            Proveedor proveedor = event.getRowValue();
+            proveedor.setTelefonoProveedor(event.getNewValue());
+            actualizarProveedorEnBaseDeDatos(proveedor);
+        });
+
+        nombreContactoProveedorColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        nombreContactoProveedorColumn.setOnEditCommit(event -> {
+            Proveedor proveedor = event.getRowValue();
+            proveedor.setNombreContactoProveedor(event.getNewValue());
+            actualizarProveedorEnBaseDeDatos(proveedor);
+        });
 
         // Configura la TableView para permitir la edición
         proveedoresTableView.setEditable(true);

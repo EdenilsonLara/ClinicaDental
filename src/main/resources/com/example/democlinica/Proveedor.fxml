@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democlinica.ProveedorController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democlinica.ProveedorController">
 
     <Pane layoutY="71.0" prefHeight="511.0" prefWidth="183.0" style="-fx-background-color: rgb(60, 68, 87);">
         <cursor>
@@ -87,12 +87,7 @@
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Label>
-    <Button layoutX="446.0" layoutY="263.0" mnemonicParsing="false" onAction="#guardarProveedor" text="Guardar">
-        <font>
-            <Font name="Arial Bold" size="14.0" />
-        </font>
-    </Button>
-    <Button layoutX="600.0" layoutY="263.0" mnemonicParsing="false" text="Limpiar">
+    <Button layoutX="205.0" layoutY="528.0" mnemonicParsing="false" onAction="#guardarProveedor" text="Guardar">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>
@@ -108,12 +103,7 @@
             <TableColumn fx:id="nombreContactoProveedorColumn" prefWidth="291.0" text="Nombre Contacto" />
         </columns>
     </TableView>
-    <Button layoutX="444.0" layoutY="528.0" mnemonicParsing="false" onAction="#eliminarProveedor" text="Eliminar">
-        <font>
-            <Font name="Arial Bold" size="14.0" />
-        </font>
-    </Button>
-    <Button layoutX="592.0" layoutY="528.0" mnemonicParsing="false" onAction="#editarProveedor" text="Actualizar">
+    <Button layoutX="303.0" layoutY="528.0" mnemonicParsing="false" onAction="#eliminarProveedor" text="Eliminar">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>

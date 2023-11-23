@@ -87,12 +87,7 @@
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Label>
-    <Button layoutX="445.0" layoutY="237.0" mnemonicParsing="false" onAction="#guardarTratamiento" text="Guardar">
-        <font>
-            <Font name="Arial Bold" size="14.0" />
-        </font>
-    </Button>
-    <Button layoutX="595.0" layoutY="237.0" mnemonicParsing="false" onAction="#limpiarCampos" text="Limpiar">
+    <Button layoutX="217.0" layoutY="528.0" mnemonicParsing="false" onAction="#guardarTratamiento" text="Guardar">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>
@@ -106,12 +101,7 @@
          <TableColumn fx:id="costoColumn" prefWidth="116.0" text="Costo" />
         </columns>
     </TableView>
-    <Button layoutX="444.0" layoutY="528.0" mnemonicParsing="false" onAction="#eliminarTratamiento" text="Eliminar">
-        <font>
-            <Font name="Arial Bold" size="14.0" />
-        </font>
-    </Button>
-    <Button fx:id="actualizar" layoutX="592.0" layoutY="528.0" mnemonicParsing="false" onAction="#actualizarTablaTratamientos" text="Editar">
+    <Button layoutX="325.0" layoutY="528.0" mnemonicParsing="false" onAction="#eliminarTratamiento" text="Eliminar">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>

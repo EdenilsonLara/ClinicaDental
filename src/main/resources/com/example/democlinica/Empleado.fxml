@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democlinica.EmpleadoController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democlinica.EmpleadoController">
 
     <Pane layoutY="71.0" prefHeight="511.0" prefWidth="183.0" style="-fx-background-color: rgb(60, 68, 87);">
         <cursor>
@@ -97,12 +97,7 @@
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Label>
-    <Button layoutX="446.0" layoutY="265.0" mnemonicParsing="false" onAction="#crearEmpleado" text="Guardar">
-        <font>
-            <Font name="Arial Bold" size="14.0" />
-        </font>
-    </Button>
-    <Button layoutX="600.0" layoutY="265.0" mnemonicParsing="false" text="Limpiar">
+    <Button layoutX="204.0" layoutY="528.0" mnemonicParsing="false" onAction="#crearEmpleado" text="Guardar">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>
@@ -120,12 +115,7 @@
             <TableColumn fx:id="telefonoColumn" prefWidth="117.0" text="Dui" />
         </columns>
     </TableView>
-    <Button layoutX="444.0" layoutY="528.0" mnemonicParsing="false" onAction="#eliminarEmpleado" text="Eliminar">
-        <font>
-            <Font name="Arial Bold" size="14.0" />
-        </font>
-    </Button>
-    <Button layoutX="592.0" layoutY="528.0" mnemonicParsing="false" onAction="#editarEmpleado" text="Actualizar">
+    <Button layoutX="305.0" layoutY="528.0" mnemonicParsing="false" onAction="#eliminarEmpleado" text="Eliminar">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>

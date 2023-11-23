@@ -1,7 +1,10 @@
 package com.example.democlinica;
 
 import com.example.democlinica.BaseDatos.Conexion;
+import com.itextpdf.kernel.pdf.canvas.draw.SolidLine;
+import com.itextpdf.layout.element.LineSeparator;
 import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.HorizontalAlignment;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,6 +14,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Cell;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import com.itextpdf.layout.Document;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -25,13 +30,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
+
 public class ReportesController {
     private int contadorReporte = 1; // Inicializamos el contador de reporte
 
     @FXML
     private void generarReportePDF(ActionEvent event) {
         // Ruta donde deseas guardar el archivo PDF
-        String rutaDirectorioPDF = "C:\\Users\\DELL\\Desktop\\pdf\\Citas\\";
+        String rutaDirectorioPDF = "C:\\Users\\lara3\\Desktop\\pdf\\Citas\\";
         String nombreArchivoPDF;
 
         Connection connection = null;
@@ -49,9 +55,14 @@ public class ReportesController {
             PdfWriter pdfWriter = new PdfWriter(pdfFile);
             PdfDocument pdfDocument = new PdfDocument(pdfWriter);
             Document document = new Document(pdfDocument);
+
             String sql = "SELECT codigoCita, apellidosPaciente, codigoPaciente, codigoSucursal, estado FROM Tabladecitas";
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
+
+            // Agregar título al inicio del informe
+            document.add(new Paragraph("Reporte de Citas").setFontSize(16).setBold().setHorizontalAlignment(HorizontalAlignment.CENTER));
+            document.add(new LineSeparator(new SolidLine()));
 
             while (resultSet.next()) {
                 String codigoCita = resultSet.getString("codigoCita");
@@ -60,20 +71,19 @@ public class ReportesController {
                 String codigoSucursal = resultSet.getString("codigoSucursal");
                 String estado = resultSet.getString("estado");
 
-                while (resultSet.next()) {
+                // Agregar detalles de cada cita
                 document.add(new Paragraph("Codigo de la cita: " + codigoCita));
                 document.add(new Paragraph("Apellidos del paciente: " + apellidoPaciente));
                 document.add(new Paragraph("Codigo del paciente: " + codigoPaciente));
-                document.add(new Paragraph("Codigo de la surcusal: " + codigoSucursal));
+                document.add(new Paragraph("Codigo de la sucursal: " + codigoSucursal));
                 document.add(new Paragraph("Estado: " + estado));
-                document.add(new Paragraph("-------------------------------------------------------"));
+                document.add(new LineSeparator(new SolidLine()));
             }
-            }
-
 
             resultSet.close();
             statement.close();
             document.close();
+            mostrarMensaje("Informe PDF generado con éxito en: " + pdfFile.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
             mostrarMensaje("Error al generar el informe PDF.");
@@ -90,6 +100,8 @@ public class ReportesController {
         }
     }
 
+
+
     private int contadorPacientes = 1;
 
 
@@ -100,7 +112,7 @@ public class ReportesController {
 
     @FXML
     private void generarPacientes(ActionEvent event){
-        String rutaDirectorioPDF = "C:\\Users\\DELL\\Desktop\\pdf\\Pacientes\\";
+        String rutaDirectorioPDF = "C:\\Users\\lara3\\Desktop\\pdf\\Pacientes\\";
         String nombreArchivoPDF;
 
         Connection connection = null;
@@ -122,6 +134,9 @@ public class ReportesController {
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
 
+            document.add(new Paragraph("Reporte de Pacientes").setFontSize(16).setBold().setHorizontalAlignment(HorizontalAlignment.CENTER));
+            document.add(new LineSeparator(new SolidLine()));
+
             while (resultSet.next()) {
                 String nombresPaciente = resultSet.getString("nombresPaciente");
                 String genero = resultSet.getString("genero");
@@ -129,16 +144,19 @@ public class ReportesController {
                 String dui = resultSet.getString("dui");
                 String telefono = resultSet.getString("telefono");
 
+
+
                 document.add(new Paragraph("Nombre del paciente: " + nombresPaciente));
                 document.add(new Paragraph("Genero del paciente: " + genero));
                 document.add(new Paragraph("Fecha de Naciento : " + fechaNacimiento));
                 document.add(new Paragraph("Dui: " + dui));
                 document.add(new Paragraph("Telefono: " + telefono));
-                document.add(new Paragraph("-------------------------------------------------------"));
+                document.add(new LineSeparator(new SolidLine()));
             }
             resultSet.close();
             statement.close();
             document.close();
+            mostrarMensaje("Informe PDF generado con éxito en: " + pdfFile.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
             mostrarMensaje("Error al generar el informe PDF.");
@@ -160,13 +178,13 @@ public class ReportesController {
 
 
     @FXML
-    private void generarTratameintos() {
+    private void generarTratamientos() {
         generarTratameintos(null);
     }
 
     @FXML
     private void generarTratameintos(ActionEvent event){
-        String rutaDirectorioPDF = "C:\\Users\\DELL\\Desktop\\pdf\\Tratamientos\\";
+        String rutaDirectorioPDF = "C:\\Users\\lara3\\Desktop\\pdf\\Tratamientos\\";
         String nombreArchivoPDF;
 
         Connection connection = null;
@@ -188,20 +206,26 @@ public class ReportesController {
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
 
+            document.add(new Paragraph("Reporte de Tratamientos").setFontSize(16).setBold().setHorizontalAlignment(HorizontalAlignment.CENTER));
+            document.add(new LineSeparator(new SolidLine()));
+
+
             while (resultSet.next()) {
                 String codigoTratamiento = resultSet.getString("codigoTratamiento");
                 String tipoServicio = resultSet.getString("tipoServicio");
                 String costo = resultSet.getString("costo");
 
 
+
                 document.add(new Paragraph("Codigo del Tratameinto: " + codigoTratamiento));
                 document.add(new Paragraph("Tipo de Servicio: " + tipoServicio));
                 document.add(new Paragraph("Costo: " + costo));
-                document.add(new Paragraph("-------------------------------------------------------"));
+                document.add(new LineSeparator(new SolidLine()));
             }
             resultSet.close();
             statement.close();
             document.close();
+            mostrarMensaje("Informe PDF generado con éxito en: " + pdfFile.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
             mostrarMensaje("Error al generar el informe PDF.");
@@ -229,7 +253,7 @@ public class ReportesController {
 
     @FXML
     private void generarInventario(ActionEvent event){
-        String rutaDirectorioPDF = "C:\\Users\\DELL\\Desktop\\pdf\\Inventario\\";
+        String rutaDirectorioPDF = "C:\\Users\\lara3\\Desktop\\pdf\\Inventario\\";
         String nombreArchivoPDF;
 
         Connection connection = null;
@@ -251,6 +275,10 @@ public class ReportesController {
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
 
+            document.add(new Paragraph("Reporte de Inventario").setFontSize(16).setBold().setHorizontalAlignment(HorizontalAlignment.CENTER));
+            document.add(new LineSeparator(new SolidLine()));
+
+
             while (resultSet.next()) {
                 String codigoInventario = resultSet.getString("codigoInventario");
                 String nombreEquipo = resultSet.getString("nombreEquipo");
@@ -259,17 +287,19 @@ public class ReportesController {
                 String cantidad = resultSet.getString("cantidad");
 
 
+
                 document.add(new Paragraph("Codigo del Inventario: " + codigoInventario ));
                 document.add(new Paragraph("Nombre Del Equipo: " + nombreEquipo));
                 document.add(new Paragraph("Descripcion: " + descripcion));
                 document.add(new Paragraph("Precio: " + precio ));
                 document.add(new Paragraph("Cantidad: " + cantidad));
-                document.add(new Paragraph("-------------------------------------------------------"));
+                document.add(new LineSeparator(new SolidLine()));
             }
 
             resultSet.close();
             statement.close();
             document.close();
+            mostrarMensaje("Informe PDF generado con éxito en: " + pdfFile.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
             mostrarMensaje("Error al generar el informe PDF.");
@@ -298,7 +328,7 @@ public class ReportesController {
 
     @FXML
     private void generarEmpleados(ActionEvent event){
-        String rutaDirectorioPDF = "C:\\Users\\DELL\\Desktop\\pdf\\Empleados\\";
+        String rutaDirectorioPDF = "C:\\Users\\lara3\\Desktop\\pdf\\Empleados\\";
         String nombreArchivoPDF;
 
         Connection connection = null;
@@ -320,6 +350,10 @@ public class ReportesController {
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
 
+            document.add(new Paragraph("Reporte de Empleado").setFontSize(16).setBold().setHorizontalAlignment(HorizontalAlignment.CENTER));
+            document.add(new LineSeparator(new SolidLine()));
+
+
             while (resultSet.next()) {
                 String nombresEmpleado = resultSet.getString("nombresEmpleado");
                 String fechaNacimiento = resultSet.getString("fechaNacimiento");
@@ -328,17 +362,19 @@ public class ReportesController {
                 String telefono = resultSet.getString("telefono");
 
 
+
                 document.add(new Paragraph("Nombre Del Empleado: " + nombresEmpleado ));
                 document.add(new Paragraph("Fecha Del Nacimiento: " + fechaNacimiento));
                 document.add(new Paragraph("Genero: " + genero));
                 document.add(new Paragraph("Dui: " + dui ));
                 document.add(new Paragraph("Telefono: " + telefono));
-                document.add(new Paragraph("-------------------------------------------------------"));
+                document.add(new LineSeparator(new SolidLine()));
             }
 
             resultSet.close();
             statement.close();
             document.close();
+            mostrarMensaje("Informe PDF generado con éxito en: " + pdfFile.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
             mostrarMensaje("Error al generar el informe PDF.");
@@ -367,7 +403,7 @@ public class ReportesController {
 
     @FXML
     private void generarProveedores(ActionEvent event){
-        String rutaDirectorioPDF = "C:\\Users\\DELL\\Desktop\\pdf\\Proveedores\\";
+        String rutaDirectorioPDF = "C:\\Users\\lara3\\Desktop\\pdf\\Proveedores\\";
         String nombreArchivoPDF;
 
         Connection connection = null;
@@ -389,6 +425,10 @@ public class ReportesController {
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
 
+            document.add(new Paragraph("Reporte de Proveedores").setFontSize(16).setBold().setHorizontalAlignment(HorizontalAlignment.CENTER));
+            document.add(new LineSeparator(new SolidLine()));
+
+
             while (resultSet.next()) {
                 String nombreEmpresa = resultSet.getString("nombreEmpresa");
                 String telefono = resultSet.getString("telefono");
@@ -397,17 +437,19 @@ public class ReportesController {
                 String codigoSucursal = resultSet.getString("codigoSucursal");
 
 
+
                 document.add(new Paragraph("Nombre Del Empleado: " + nombreEmpresa ));
                 document.add(new Paragraph("Fecha Del Nacimiento: " + telefono));
                 document.add(new Paragraph("Genero: " + direccion));
                 document.add(new Paragraph("nombreContacto: " + nombreContacto ));
                 document.add(new Paragraph("Telefono: " + codigoSucursal));
-                document.add(new Paragraph("-------------------------------------------------------"));
+                document.add(new LineSeparator(new SolidLine()));
             }
 
             resultSet.close();
             statement.close();
             document.close();
+            mostrarMensaje("Informe PDF generado con éxito en: " + pdfFile.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
             mostrarMensaje("Error al generar el informe PDF.");

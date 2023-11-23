@@ -94,6 +94,8 @@ public class tratamientoController {
             if (filasAfectadas > 0) {
                 mostrarAlerta("Tratamiento Guardado", "El tratamiento se ha guardado correctamente en la base de datos.");
                 actualizarTablaTratamientos();
+                limpiarCampos();
+
             } else {
                 mostrarAlerta("Error", "No se pudo guardar el tratamiento en la base de datos.");
             }
@@ -138,14 +140,7 @@ public class tratamientoController {
 
         tratamientoTableView.setEditable(true);
 
-  //      tipoServicioColumn.setCellFactory(TextFieldTableCell.forTableColumn()); // Permite la edición en la columna tipoServicio
-   //     costoColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-
     }
-
-
-
-
 
 
     @FXML
@@ -223,7 +218,7 @@ public class tratamientoController {
     }
 
     @FXML
-    private void limpiarCampos(ActionEvent event) {
+    private void limpiarCampos() {
         // Tu código para limpiar los campos de entrada, por ejemplo:
         tipoServicioTextField.clear();
         costoTextField.clear();

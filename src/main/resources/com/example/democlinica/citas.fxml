@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democlinica.citasController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democlinica.citasController">
 
     <Pane layoutY="71.0" prefHeight="511.0" prefWidth="183.0" style="-fx-background-color: rgb(60, 68, 87);">
         <cursor>
@@ -108,7 +108,7 @@
             <Font name="Arial Bold" size="14.0" />
         </font>
     </Label>
-    <Button layoutX="455.0" layoutY="278.0" mnemonicParsing="false" onAction="#guardarCita" text="Guardar">
+    <Button layoutX="200.0" layoutY="535.0" mnemonicParsing="false" onAction="#guardarCita" text="Guardar">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>
@@ -134,12 +134,7 @@
             <TableColumn fx:id="codigoPacienteColumn" prefWidth="88.0" text="CodigoPaciente" />
         </columns>
     </TableView>
-    <Button layoutX="444.0" layoutY="528.0" mnemonicParsing="false" onAction="#eliminarCita" text="Eliminar">
-        <font>
-            <Font name="Arial Bold" size="14.0" />
-        </font>
-    </Button>
-    <Button layoutX="592.0" layoutY="528.0" mnemonicParsing="false" onAction="#editarCita" text="Actualizar">
+    <Button layoutX="299.0" layoutY="535.0" mnemonicParsing="false" onAction="#eliminarCita" text="Eliminar">
         <font>
             <Font name="Arial Bold" size="14.0" />
         </font>
